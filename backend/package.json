@@ -1,0 +1,25 @@
+{
+  "name": "skillpro",
+  "version": "1.0.0",
+  "description": "Project to hire skills",
+  "keywords": [
+    "Skills",
+    "React",
+    "JavaScript"
+  ],
+  "homepage": "https://github.com/shashank1049/SkillPro#readme",
+  "bugs": {
+    "url": "https://github.com/shashank1049/SkillPro/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shashank1049/SkillPro.git"
+  },
+  "license": "ISC",
+  "author": "Shashank Mishra",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js"
+  }
+}
