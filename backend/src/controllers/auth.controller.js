@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { User } from "../models/user.model.js";
+import { ApiError } from "../utils/apiError.js";
+import { ApiResponse } from "../utils/apiResponse.js";
+import { User } from "../models/user.models.js";
 
 
 const generateAccessTokenAndRefreshTokens = async (userId) => {
@@ -104,4 +104,72 @@ const registerUser=asyncHandler( async (req, res)=>{
 
 })
 
-export {registerUser}
+
+const loginUser=asyncHandler(async(req, res)=>{
+    //get data
+    //validate data
+    //find user if exists
+    //check password
+    //generate tokens
+    //send cookies
+    //return response
+    const {email, username, password}=req.body;
+    if(!(email||username)){
+        throw new ApiError(
+            400,
+            "Email or username is required"
+        );
+    }
+    if(!password){
+        throw new ApiError(
+            400,
+            "Password is required"
+        )
+    }
+    const user = await User.findOne({
+        $or:[
+            {email},
+            {username}
+        ]
+    })
+
+    if(!user){
+        throw new ApiError(
+            404,
+            "User does not exists"
+        )
+    }
+    
+    const isPasswordValid= await user.isPasswordCorrect(password);
+
+    if(!isPasswordValid){
+        throw new ApiError(
+            401,
+            "Invalid user credentials"
+        )
+    }
+    const {accessToken, refreshToken}=await generateAccessTokenAndRefreshTokens(user._id);
+    const options={
+        httpOnly:true,
+        secure:true,
+    }
+
+    const loggedInUser=await User.findById(user._id).select("-password -refreshToken")
+
+    return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+        new ApiResponse(
+            200,
+            {
+                user:loggedInUser,
+                
+            },
+            "User Logged in successfully"
+        )
+    )
+})
+
+export {registerUser, loginUser}

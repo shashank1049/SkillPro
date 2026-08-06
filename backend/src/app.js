@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { ApiError } from "./utils/ApiError.utils.js";
+import { ApiError } from "./utils/apiError.js";
 import authRouter from "./routes/auth.routes.js";
 
 const app = express();
@@ -27,6 +27,8 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+    console.error("ERROR:", err);
+    console.error(err.stack);
     const statusCode = err.statusCode || 500;
     res.status(statusCode).json({
         success: false,
