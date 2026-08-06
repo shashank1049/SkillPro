@@ -2,6 +2,9 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { User } from "../models/user.models.js";
+import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import jwt from "jsonwebtoken";
+
 
 
 const generateAccessTokenAndRefreshTokens = async (userId) => {
@@ -55,6 +58,29 @@ const registerUser=asyncHandler( async (req, res)=>{
     ) {
         throw new ApiError(400, "All required fields are mandatory");
     }
+
+    // check for avatar
+    const avatarLocalPath = req.files?.avatar?.[0]?.path;
+
+    const coverImageLocalPath =
+    req.files?.coverImage?.[0]?.path;
+
+    if(!avatarLocalPath){
+        throw new ApiError(400, "Avatar is required");
+    }
+
+    const avatar=await uploadOnCloudinary(
+        avatarLocalPath
+    );
+    const coverImage=coverImageLocalPath ? await uploadOnCloudinary(
+        coverImageLocalPath
+    ):null;
+
+    if(!avatar){
+        throw new ApiError(500, "Failed to upload avatar")
+    }
+
+
     const emailRegex = /^\S+@\S+\.\S+$/;
     if (!emailRegex.test(email)) {
             throw new ApiError(400, "Please enter a valid email address");
@@ -86,6 +112,8 @@ const registerUser=asyncHandler( async (req, res)=>{
         phone,
         city,
         role:role||"customer",
+        avatar: avatar.secure_url,
+        coverImage: coverImage?.secure_url||""
     });
 
     const createdUser= await User.findById(user._id).select( "-password -refreshToken" );
@@ -165,6 +193,8 @@ const loginUser=asyncHandler(async(req, res)=>{
             200,
             {
                 user:loggedInUser,
+                accessToken,
+                refreshToken
                 
             },
             "User Logged in successfully"
@@ -172,4 +202,89 @@ const loginUser=asyncHandler(async(req, res)=>{
     )
 })
 
-export {registerUser, loginUser}
+
+
+const logoutUser = asyncHandler(async (req, res) => {
+
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                refreshToken: "",
+            },
+        },
+        {
+            new: true,
+        }
+    );
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+    };
+    return res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(
+            new ApiResponse(
+                200,
+                {},
+                "User logged out successfully"
+            )
+        );
+});
+
+const refreshAccessToken=asyncHandler(async (req, res )=>{
+    try {
+        const incomingRefreshToken =
+        req.cookies.refreshToken ||
+        req.body.refreshToken;
+        const decodedToken=jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
+    
+        const user = await User.findById(decodedToken._id);
+    
+        if (!user) {
+            throw new ApiError(
+                401,
+                "Invalid refresh token"
+            );
+        }
+    
+        if (incomingRefreshToken !== user.refreshToken) {
+            throw new ApiError(
+                401,
+                "Refresh token is expired or already used"
+            );
+        }
+        const { accessToken, refreshToken } =
+        await generateAccessTokenAndRefreshTokens(
+            user._id
+        );
+        const options = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+        };
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", refreshToken, options)
+            .json(
+                new ApiResponse(
+                    200,
+                    {
+                        accessToken,
+                        refreshToken,
+                    },
+                    "Access token refreshed successfully"
+                )
+        );
+    } catch (error) {
+        throw new ApiError(401,
+            "Invalid or Expired refresh Token"
+        )
+        
+    }
+})
+
+
+export {registerUser, loginUser, logoutUser}

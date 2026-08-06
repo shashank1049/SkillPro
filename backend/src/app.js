@@ -27,8 +27,8 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    console.error("ERROR:", err);
-    console.error(err.stack);
+    // console.error("ERROR:", err);
+    // console.error(err.stack);
     const statusCode = err.statusCode || 500;
     res.status(statusCode).json({
         success: false,
