@@ -6,6 +6,10 @@ import authRouter from "./routes/auth.routes.js";
 import professionalRouter from "./routes/professional.routes.js"
 import serviceRouter from "./routes/service.routes.js"
 import bookingRouter from "./routes/booking.routes.js"
+import reveiwRouter from "./routes/review.routes.js"
+import paymentRouter from "./routes/payment.routes.js"
+
+
 
 const app = express();
 
@@ -23,10 +27,20 @@ app.get("/api/v1/health", (req, res) => {
     res.status(200).json({ success: true, message: "SkillPro API is running" });
 });
 
+
+
+
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/professional", professionalRouter);
 app.use("/api/v1/service", serviceRouter)
 app.use("/api/v1/booking", bookingRouter)
+app.use("/api/v1/review",reveiwRouter)
+app.use("/api/v1/payment",paymentRouter)
+
+
+
+
+
 
 app.use((req, res, next) => {
     next(new ApiError(404, "Route not found"));

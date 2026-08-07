@@ -10,7 +10,7 @@ import { upload } from "../middlewares/multer.middleware.js";
  } from "../controllers/professional.controller.js";
 
 const router = Router();
-console.log("Professional Routes Loaded");
+// console.log("Professional Routes Loaded");
 
 router.route("/create-profile").post(
     verifyJWT,
