@@ -3,6 +3,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ApiError } from "./utils/apiError.js";
 import authRouter from "./routes/auth.routes.js";
+import professionalRouter from "./routes/professional.routes.js"
+import serviceRouter from "./routes/service.routes.js"
+import bookingRouter from "./routes/booking.routes.js"
 
 const app = express();
 
@@ -21,6 +24,9 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/professional", professionalRouter);
+app.use("/api/v1/service", serviceRouter)
+app.use("/api/v1/booking", bookingRouter)
 
 app.use((req, res, next) => {
     next(new ApiError(404, "Route not found"));
