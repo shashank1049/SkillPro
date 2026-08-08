@@ -8,7 +8,8 @@ import { DB_NAME } from "./constants.js";
 dotenv.config({
     path: "./.env"
 });
-
+console.log("PORT:", process.env.PORT);
+console.log("CORS:", process.env.CORS_ORIGIN);
 connectDB()
 .then(()=>{
     app.listen(process.env.PORT || 8000, () => {

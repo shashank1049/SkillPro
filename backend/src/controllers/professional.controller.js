@@ -228,9 +228,8 @@ const getAllProfessionals = asyncHandler(async (req, res) => {
         order = "desc",
     } = req.query;
 
-
     const filter = {
-        isApproved: true,
+        isApproved: false,
     };
 
     if (profession) {
