@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import Categories from "../components/home/Categories";
 import FeaturedProfessionals from "../components/home/FeaturedProfessionals";
 import WhyChooseUs from "../components/home/WhyChooseUs";
+import HowItWorks from "../components/home/HowItWorks";
+import Testimonials from "../components/home/Testimonials";
+
+
 
 function Home() {
   return (
@@ -67,12 +71,12 @@ function Home() {
 
 
       {/*  HOW IT WORKS START */}
-
-
+    <HowItWorks />
+    
 
       {/*TESTIMONIAL SECTION START*/}
 
-
+    <Testimonials />
 
       {/*CTA SECTION START */}
 
