@@ -229,7 +229,7 @@ const getAllProfessionals = asyncHandler(async (req, res) => {
     } = req.query;
 
     const filter = {
-        isApproved: false,
+        isApproved: true,
     };
 
     if (profession) {
