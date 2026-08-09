@@ -6,25 +6,65 @@ function ProfessionalDetails() {
   const { professionalId } = useParams();
 
   const [professional, setProfessional] = useState(null);
+  const [services, setServices] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchProfessional = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         setError("");
 
-        const response = await api.get(
+        // =========================
+        // FETCH PROFESSIONAL
+        // =========================
+
+        const professionalResponse = await api.get(
           `/professional/${professionalId}`
         );
 
-        console.log("Professional Details:", response.data);
+        console.log(
+          "Professional Details:",
+          professionalResponse.data
+        );
 
-        setProfessional(response.data?.data);
+        setProfessional(
+          professionalResponse.data?.data
+        );
+
+
+        // =========================
+        // FETCH SERVICES
+        // =========================
+
+        const servicesResponse = await api.get(
+          "/service"
+        );
+
+        console.log(
+          "Services Response:",
+          servicesResponse.data
+        );
+
+        const allServices =
+          servicesResponse.data?.data?.services || [];
+
+        // Only services belonging to this professional
+
+        const professionalServices =
+          allServices.filter(
+            (service) =>
+              service.professional?._id ===
+              professionalId
+          );
+
+        setServices(professionalServices);
+
       } catch (error) {
         console.error(
-          "Error fetching professional:",
+          "Error fetching professional details:",
           error
         );
 
@@ -37,8 +77,13 @@ function ProfessionalDetails() {
       }
     };
 
-    fetchProfessional();
+    fetchData();
   }, [professionalId]);
+
+
+  // =========================
+  // LOADING
+  // =========================
 
   if (loading) {
     return (
@@ -50,10 +95,16 @@ function ProfessionalDetails() {
     );
   }
 
+
+  // =========================
+  // ERROR
+  // =========================
+
   if (error) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
         <div className="text-center">
+
           <h2 className="text-2xl font-bold text-red-600">
             Something went wrong
           </h2>
@@ -68,10 +119,16 @@ function ProfessionalDetails() {
           >
             Back to Services
           </Link>
+
         </div>
       </main>
     );
   }
+
+
+  // =========================
+  // PROFESSIONAL NOT FOUND
+  // =========================
 
   if (!professional) {
     return (
@@ -83,15 +140,22 @@ function ProfessionalDetails() {
     );
   }
 
+
   return (
     <main className="min-h-screen bg-slate-50 py-16">
+
       <div className="mx-auto max-w-5xl px-6">
 
-        {/* PROFILE CARD */}
+        {/* =========================
+            PROFILE CARD
+        ========================== */}
 
         <div className="rounded-2xl bg-white p-8 shadow-lg">
 
-          {/* TOP SECTION */}
+
+          {/* =========================
+              TOP SECTION
+          ========================== */}
 
           <div className="flex flex-col items-center gap-6 md:flex-row">
 
@@ -127,7 +191,9 @@ function ProfessionalDetails() {
           </div>
 
 
-          {/* BIO */}
+          {/* =========================
+              BIO
+          ========================== */}
 
           <div className="mt-10">
 
@@ -143,11 +209,14 @@ function ProfessionalDetails() {
           </div>
 
 
-          {/* DETAILS */}
+          {/* =========================
+              DETAILS
+          ========================== */}
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
             <div className="rounded-xl bg-slate-50 p-5 text-center">
+
               <p className="text-sm text-gray-500">
                 Experience
               </p>
@@ -155,9 +224,12 @@ function ProfessionalDetails() {
               <p className="mt-2 text-xl font-bold">
                 {professional.experience || 0} years
               </p>
+
             </div>
 
+
             <div className="rounded-xl bg-slate-50 p-5 text-center">
+
               <p className="text-sm text-gray-500">
                 Pricing
               </p>
@@ -165,9 +237,12 @@ function ProfessionalDetails() {
               <p className="mt-2 text-xl font-bold">
                 ₹{professional.pricing}
               </p>
+
             </div>
 
+
             <div className="rounded-xl bg-slate-50 p-5 text-center">
+
               <p className="text-sm text-gray-500">
                 Availability
               </p>
@@ -177,9 +252,12 @@ function ProfessionalDetails() {
                   ? "Available"
                   : "Unavailable"}
               </p>
+
             </div>
 
+
             <div className="rounded-xl bg-slate-50 p-5 text-center">
+
               <p className="text-sm text-gray-500">
                 Rating
               </p>
@@ -187,14 +265,18 @@ function ProfessionalDetails() {
               <p className="mt-2 text-xl font-bold">
                 ⭐ {professional.rating || 0}
               </p>
+
             </div>
 
           </div>
 
 
-          {/* SKILLS */}
+          {/* =========================
+              SKILLS
+          ========================== */}
 
           {professional.skills?.length > 0 && (
+
             <div className="mt-10">
 
               <h2 className="text-xl font-bold">
@@ -205,24 +287,30 @@ function ProfessionalDetails() {
 
                 {professional.skills.map(
                   (skill, index) => (
+
                     <span
                       key={index}
                       className="rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700"
                     >
                       {skill}
                     </span>
+
                   )
                 )}
 
               </div>
 
             </div>
+
           )}
 
 
-          {/* SERVICE AREAS */}
+          {/* =========================
+              SERVICE AREAS
+          ========================== */}
 
           {professional.serviceAreas?.length > 0 && (
+
             <div className="mt-10">
 
               <h2 className="text-xl font-bold">
@@ -233,37 +321,109 @@ function ProfessionalDetails() {
 
                 {professional.serviceAreas.map(
                   (area, index) => (
+
                     <span
                       key={index}
                       className="rounded-full bg-gray-100 px-4 py-2 text-sm text-gray-700"
                     >
                       📍 {area}
                     </span>
+
                   )
                 )}
 
               </div>
 
             </div>
+
           )}
 
 
-          {/* ACTIONS */}
+          {/* =========================
+              SERVICES OFFERED
+          ========================== */}
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-12">
+
+            <h2 className="text-2xl font-bold text-slate-900">
+              Services Offered
+            </h2>
+
+            {services.length === 0 ? (
+
+              <p className="mt-4 text-gray-500">
+                This professional has no services available yet.
+              </p>
+
+            ) : (
+
+              <div className="mt-6 grid gap-6 md:grid-cols-2">
+
+                {services.map((service) => (
+
+                  <div
+                    key={service._id}
+                    className="rounded-xl border bg-slate-50 p-6 transition hover:shadow-md"
+                  >
+
+                    <h3 className="text-xl font-bold text-slate-900">
+                      {service.title}
+                    </h3>
+
+                    <p className="mt-2 text-gray-600">
+                      {service.description}
+                    </p>
+
+                    <p className="mt-4 text-sm text-gray-500">
+                      Category: {service.category}
+                    </p>
+
+                    <div className="mt-5 flex items-end justify-between">
+
+                      <div>
+
+                        <p className="text-xl font-bold text-slate-900">
+                          ₹{service.price}
+                        </p>
+
+                        <p className="text-sm text-gray-500">
+                          {service.duration} minutes
+                        </p>
+
+                      </div>
+
+
+                      <Link
+                        to={`/booking/${professionalId}/${service._id}`}
+                        className="rounded-lg bg-blue-600 px-5 py-2 font-semibold text-white transition hover:bg-blue-700"
+                      >
+                        Book This Service
+                      </Link>
+
+                    </div>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            )}
+
+          </div>
+
+
+          {/* =========================
+              ACTIONS
+          ========================== */}
+
+          <div className="mt-10">
 
             <Link
               to="/services"
-              className="flex-1 rounded-lg border border-gray-300 py-3 text-center font-semibold text-gray-700 hover:bg-gray-50"
+              className="block w-full rounded-lg border border-gray-300 py-3 text-center font-semibold text-gray-700 hover:bg-gray-50"
             >
               Back to Services
-            </Link>
-
-            <Link
-              to={`/booking/${professional._id}`}
-              className="flex-1 rounded-lg bg-blue-600 py-3 text-center font-semibold text-white hover:bg-blue-700"
-            >
-              Book Now
             </Link>
 
           </div>
@@ -271,6 +431,7 @@ function ProfessionalDetails() {
         </div>
 
       </div>
+
     </main>
   );
 }

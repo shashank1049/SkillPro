@@ -30,10 +30,17 @@ function Navbar() {
           </Link>
 
           <Link
-            to="/professionals"
+            to="/professional-dashboard"
             className="text-gray-700 transition hover:text-blue-600"
           >
             Professionals
+          </Link>
+
+          <Link
+            to="/my-bookings"
+            className="text-gray-700 transition hover:text-blue-600"
+          >
+            My Bookings
           </Link>
         </div>
 

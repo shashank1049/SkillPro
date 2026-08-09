@@ -70,7 +70,8 @@ const createProfessionalProfile = asyncHandler(async (req, res) => {
 
         serviceAreas:Array.isArray(serviceAreas)?serviceAreas:serviceAreas?[serviceAreas]:[],
 
-        portfolioImages
+        portfolioImages,
+        isApproved:true
     })
 
     return res
@@ -86,6 +87,8 @@ const createProfessionalProfile = asyncHandler(async (req, res) => {
 
 
 const getMyProfessionalProfile = asyncHandler(async (req, res) => {
+
+    
     const profile = await Professional.findOne({
         owner: req.user._id,
     }).populate(

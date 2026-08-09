@@ -7,6 +7,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProfessionalDetails from "./pages/ProfessionalDetails";
+import Booking from "./pages/Booking";
+import MyBookings from "./pages/MyBooking";
+import BookingDetails from "./pages/BookingDetails";
+import ProfessionalDashboard from "./pages/ProfessionalDashboard";
 
 
 
@@ -22,6 +26,29 @@ function App() {
           <Route
             path="/professional/:professionalId"
             element={<ProfessionalDetails />}
+          />
+          <Route
+            path="/booking/:professionalId/:serviceId"
+            element={<Booking />}
+          />
+          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route
+            path="/booking/:professionalId/:serviceId"
+            element={<Booking />}
+          />
+
+          <Route
+            path="/my-bookings"
+            element={<MyBookings />}
+          />
+
+          <Route
+            path="/booking-details/:bookingId"
+            element={<BookingDetails />}
+          />
+          <Route
+            path="/professional-dashboard"
+            element={<ProfessionalDashboard />}
           />
         </Route>
       </Routes>

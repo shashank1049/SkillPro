@@ -45,7 +45,7 @@ router.route("/:bookingId").get(
     getBookingById
 );
 
-router.route("/:bookingId/cancel").patch(
+router.route("/cancel/:bookingId").patch(
     verifyJWT,
     cancelBooking
 );
