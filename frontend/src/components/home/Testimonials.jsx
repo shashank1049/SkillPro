@@ -24,66 +24,53 @@ function Testimonials() {
   ];
 
   return (
-    <section className="bg-slate-50 py-20">
+    <section className="bg-[var(--surface-secondary)] py-20 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6">
 
-        {/* SECTION HEADING START */}
-
         <div className="text-center">
-          <h2 className="text-4xl font-bold text-slate-900">
+
+          <h2 className="text-4xl font-bold text-[var(--text-primary)]">
             What People Say
           </h2>
 
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-[var(--text-secondary)]">
             See what our customers and professionals think about SkillPro.
           </p>
+
         </div>
-
-        {/* SECTION HEADING END */}
-
-
-        {/* TESTIMONIAL CARDS START */}
 
         <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="rounded-2xl bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-[var(--text-primary)] shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl"
             >
-
-              {/* Rating */}
 
               <div className="text-lg text-yellow-500">
                 {"⭐".repeat(testimonial.rating)}
               </div>
 
-
-              {/* Review */}
-
-              <p className="mt-5 leading-7 text-gray-600">
+              <p className="mt-5 leading-7 text-[var(--text-secondary)]">
                 "{testimonial.review}"
               </p>
 
+              <div className="mt-6 border-t border-[var(--border)] pt-5">
 
-              {/* User */}
-
-              <div className="mt-6 border-t pt-5">
-                <h3 className="font-semibold text-slate-900">
+                <h3 className="font-semibold text-[var(--text-primary)]">
                   {testimonial.name}
                 </h3>
 
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-[var(--text-secondary)]">
                   {testimonial.role}
                 </p>
+
               </div>
 
             </div>
           ))}
 
         </div>
-
-        {/* TESTIMONIAL CARDS END */}
 
       </div>
     </section>

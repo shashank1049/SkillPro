@@ -27,28 +27,29 @@ function WhyChooseUs() {
   ];
 
   return (
-    <section className="bg-slate-50 py-20">
+    <section className="bg-[var(--surface-secondary)] py-20 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6">
 
-        {/* Section Heading */}
         <div className="text-center">
-          <h2 className="text-4xl font-bold text-slate-900">
+
+          <h2 className="text-4xl font-bold text-[var(--text-primary)]">
             Why Choose SkillPro?
           </h2>
 
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-[var(--text-secondary)]">
             Everything you need to hire trusted professionals with confidence.
           </p>
+
         </div>
 
-        {/* Feature Cards */}
         <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
 
           {features.map((feature, index) => (
             <div
               key={index}
-              className="rounded-2xl bg-white p-8 text-center shadow-md transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center text-[var(--text-primary)] shadow-md transition duration-300 hover:-translate-y-2 hover:shadow-xl"
             >
+
               <div className="text-5xl">
                 {feature.icon}
               </div>
@@ -57,7 +58,7 @@ function WhyChooseUs() {
                 {feature.title}
               </h3>
 
-              <p className="mt-3 text-gray-600">
+              <p className="mt-3 text-[var(--text-secondary)]">
                 {feature.description}
               </p>
 

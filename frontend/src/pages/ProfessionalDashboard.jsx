@@ -9,18 +9,10 @@ function ProfessionalDashboard() {
   const [actionLoading, setActionLoading] = useState("");
   const [error, setError] = useState("");
 
-  // ==========================================
-  // FETCH PROFILE + BOOKINGS
-  // ==========================================
-
   useEffect(() => {
     const fetchDashboard = async () => {
       setLoading(true);
       setError("");
-
-      // ========================================
-      // FETCH PROFESSIONAL PROFILE
-      // ========================================
 
       try {
         const profileResponse = await api.get(
@@ -35,7 +27,6 @@ function ProfessionalDashboard() {
         setProfile(
           profileResponse.data?.data || null
         );
-
       } catch (profileError) {
         console.error(
           "Professional Profile Error:",
@@ -47,10 +38,6 @@ function ProfessionalDashboard() {
             "Unable to load professional profile."
         );
       }
-
-      // ========================================
-      // FETCH PROFESSIONAL BOOKINGS
-      // ========================================
 
       try {
         const bookingsResponse = await api.get(
@@ -65,14 +52,12 @@ function ProfessionalDashboard() {
         setBookings(
           bookingsResponse.data?.data || []
         );
-
       } catch (bookingError) {
         console.error(
           "Professional Bookings Error:",
           bookingError
         );
 
-        // Don't break the whole dashboard
         setBookings([]);
       }
 
@@ -81,10 +66,6 @@ function ProfessionalDashboard() {
 
     fetchDashboard();
   }, []);
-
-  // ==========================================
-  // UPDATE BOOKING STATUS
-  // ==========================================
 
   const handleStatusUpdate = async (
     bookingId,
@@ -97,7 +78,7 @@ function ProfessionalDashboard() {
       const response = await api.patch(
         `/booking/${bookingId}/status`,
         {
-          status,
+          bookingStatus: status,
         }
       );
 
@@ -106,7 +87,6 @@ function ProfessionalDashboard() {
         response.data
       );
 
-      // Update booking locally
       setBookings((prevBookings) =>
         prevBookings.map((booking) =>
           booking._id === bookingId
@@ -117,7 +97,6 @@ function ProfessionalDashboard() {
             : booking
         )
       );
-
     } catch (error) {
       console.error(
         "Status Update Error:",
@@ -128,134 +107,109 @@ function ProfessionalDashboard() {
         error.response?.data?.message ||
           "Unable to update booking status."
       );
-
     } finally {
       setActionLoading("");
     }
   };
 
-  // ==========================================
-  // LOADING
-  // ==========================================
-
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-50">
-        <p className="text-lg text-gray-500">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--background)] transition-colors duration-300">
+        <p className="text-lg text-[var(--text-secondary)]">
           Loading dashboard...
         </p>
       </main>
     );
   }
 
-  // ==========================================
-  // PROFILE NOT FOUND
-  // ==========================================
-
   if (error && !profile) {
     return (
-      <main className="min-h-screen bg-slate-50 px-6 py-20">
+      <main className="min-h-screen bg-[var(--background)] px-6 py-20 transition-colors duration-300">
 
         <div className="mx-auto max-w-3xl">
 
-          <div className="rounded-3xl bg-white p-10 text-center shadow-lg">
+          <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-10 text-center shadow-lg">
 
-            {/* ICON */}
-
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 text-4xl">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[var(--primary-light)] text-4xl">
               💼
             </div>
 
-            {/* HEADING */}
-
-            <h1 className="mt-6 text-3xl font-bold text-slate-900">
+            <h1 className="mt-6 text-3xl font-bold text-[var(--text-primary)]">
               Become a Professional
             </h1>
 
-            {/* DESCRIPTION */}
-
-            <p className="mx-auto mt-4 max-w-xl text-lg leading-7 text-gray-500">
+            <p className="mx-auto mt-4 max-w-xl text-lg leading-7 text-[var(--text-secondary)]">
               Have a skill that you want to offer?
               Join SkillPro as a professional and
               connect with customers looking for
               your services.
             </p>
 
-            {/* BENEFITS */}
-
             <div className="mt-8 grid gap-4 text-left sm:grid-cols-3">
 
-              <div className="rounded-xl bg-slate-50 p-5">
-
+              <div className="rounded-xl bg-[var(--surface-secondary)] p-5">
                 <div className="text-2xl">
                   👤
                 </div>
 
-                <h3 className="mt-3 font-semibold text-slate-900">
+                <h3 className="mt-3 font-semibold text-[var(--text-primary)]">
                   Create Profile
                 </h3>
 
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
                   Showcase your skills and experience.
                 </p>
-
               </div>
 
-              <div className="rounded-xl bg-slate-50 p-5">
-
+              <div className="rounded-xl bg-[var(--surface-secondary)] p-5">
                 <div className="text-2xl">
                   📋
                 </div>
 
-                <h3 className="mt-3 font-semibold text-slate-900">
+                <h3 className="mt-3 font-semibold text-[var(--text-primary)]">
                   Get Bookings
                 </h3>
 
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
                   Receive service requests from customers.
                 </p>
-
               </div>
 
-              <div className="rounded-xl bg-slate-50 p-5">
-
+              <div className="rounded-xl bg-[var(--surface-secondary)] p-5">
                 <div className="text-2xl">
                   💰
                 </div>
 
-                <h3 className="mt-3 font-semibold text-slate-900">
+                <h3 className="mt-3 font-semibold text-[var(--text-primary)]">
                   Earn Money
                 </h3>
 
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
                   Turn your skills into a source of income.
                 </p>
-
               </div>
 
             </div>
-
-            {/* BUTTONS */}
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
 
               <a
                 href="/login?role=professional"
-                className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white transition hover:bg-blue-700"
+                className="rounded-lg bg-[var(--primary)] px-8 py-3 font-semibold text-white transition hover:bg-[var(--primary-hover)]"
               >
                 Login as Professional
               </a>
 
               <a
                 href="/register?role=professional"
-                className="rounded-lg border border-blue-600 px-8 py-3 font-semibold text-blue-600 transition hover:bg-blue-50"
+                className="rounded-lg border border-[var(--primary)] px-8 py-3 font-semibold text-[var(--primary)] transition hover:bg-[var(--primary-light)]"
               >
                 Register as Professional
               </a>
 
             </div>
 
-            <p className="mt-6 text-sm text-gray-400">
+            <p className="mt-6 text-sm text-[var(--text-secondary)]">
               Already offering services on SkillPro?
               Login to manage your professional account.
             </p>
@@ -267,10 +221,6 @@ function ProfessionalDashboard() {
       </main>
     );
   }
-
-  // ==========================================
-  // COUNTS
-  // ==========================================
 
   const pendingBookings = bookings.filter(
     (booking) =>
@@ -287,109 +237,95 @@ function ProfessionalDashboard() {
       booking.bookingStatus === "Completed"
   ).length;
 
-  // ==========================================
-  // MAIN UI
-  // ==========================================
+  const rejectedBookings = bookings.filter(
+    (booking) =>
+      booking.bookingStatus === "Rejected"
+  ).length;
 
   return (
-    <main className="min-h-screen bg-slate-50 py-12">
+    <main className="min-h-screen bg-[var(--background)] py-12 transition-colors duration-300">
 
       <div className="mx-auto max-w-7xl px-6">
 
-        {/* =====================================
-            HEADER
-        ====================================== */}
+        {/* HEADER */}
 
         <div className="mb-10">
 
-          <p className="text-sm font-medium text-blue-600">
+          <p className="text-sm font-medium text-[var(--primary)]">
             Professional Dashboard
           </p>
 
-          <h1 className="mt-2 text-3xl font-bold text-slate-900">
+          <h1 className="mt-2 text-3xl font-bold text-[var(--text-primary)]">
             Welcome,{" "}
             {profile?.owner?.fullName ||
               "Professional"}{" "}
             👋
           </h1>
 
-          <p className="mt-2 text-gray-500">
+          <p className="mt-2 text-[var(--text-secondary)]">
             Manage your bookings and services from here.
           </p>
 
         </div>
 
-
-        {/* =====================================
-            ERROR
-        ====================================== */}
+        {/* ERROR */}
 
         {error && (
-          <div className="mb-6 rounded-xl bg-red-50 p-4 text-red-600">
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-600 dark:border-red-900 dark:bg-red-950/30">
             {error}
           </div>
         )}
 
+        {/* STATS */}
 
-        {/* =====================================
-            STATS
-        ====================================== */}
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
-        <div className="grid gap-5 md:grid-cols-3">
-
-          {/* PENDING */}
-
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-
-            <p className="text-sm text-gray-500">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+            <p className="text-sm text-[var(--text-secondary)]">
               Pending Bookings
             </p>
 
             <p className="mt-2 text-3xl font-bold text-yellow-600">
               {pendingBookings}
             </p>
-
           </div>
 
-
-          {/* ACCEPTED */}
-
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-
-            <p className="text-sm text-gray-500">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+            <p className="text-sm text-[var(--text-secondary)]">
               Accepted Bookings
             </p>
 
             <p className="mt-2 text-3xl font-bold text-green-600">
               {acceptedBookings}
             </p>
-
           </div>
 
-
-          {/* COMPLETED */}
-
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-
-            <p className="text-sm text-gray-500">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+            <p className="text-sm text-[var(--text-secondary)]">
               Completed Bookings
             </p>
 
-            <p className="mt-2 text-3xl font-bold text-blue-600">
+            <p className="mt-2 text-3xl font-bold text-[var(--primary)]">
               {completedBookings}
             </p>
+          </div>
 
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+            <p className="text-sm text-[var(--text-secondary)]">
+              Rejected Bookings
+            </p>
+
+            <p className="mt-2 text-3xl font-bold text-red-600">
+              {rejectedBookings}
+            </p>
           </div>
 
         </div>
 
-
-        {/* =====================================
-            PROFILE SUMMARY
-        ====================================== */}
+        {/* PROFILE */}
 
         {profile && (
-          <div className="mt-8 rounded-2xl bg-white p-6 shadow-sm">
+          <div className="mt-8 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
 
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
 
@@ -402,22 +338,23 @@ function ProfessionalDashboard() {
                   profile.owner?.fullName ||
                   "Professional"
                 }
-                className="h-20 w-20 rounded-full object-cover"
+                className="h-20 w-20 rounded-full border-2 border-[var(--primary)] object-cover"
               />
 
               <div>
 
-                <h2 className="text-xl font-bold text-slate-900">
+                <h2 className="text-xl font-bold text-[var(--text-primary)]">
                   {profile.owner?.fullName ||
                     "Professional"}
                 </h2>
 
-                <p className="text-blue-600">
+                <p className="text-[var(--primary)]">
                   {profile.profession}
                 </p>
 
-                <p className="mt-1 text-sm text-gray-500">
-                  📍 {profile.owner?.city ||
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  📍{" "}
+                  {profile.owner?.city ||
                     "Location not available"}
                 </p>
 
@@ -428,8 +365,8 @@ function ProfessionalDashboard() {
                 <span
                   className={`rounded-full px-4 py-2 text-sm font-medium ${
                     profile.availability
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
+                      ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400"
+                      : "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400"
                   }`}
                 >
                   {profile.availability
@@ -444,39 +381,35 @@ function ProfessionalDashboard() {
           </div>
         )}
 
-
-        {/* =====================================
-            BOOKINGS
-        ====================================== */}
+        {/* BOOKINGS */}
 
         <section className="mt-10">
 
           <div className="mb-5">
 
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">
               Incoming Bookings
             </h2>
 
-            <p className="mt-1 text-gray-500">
+            <p className="mt-1 text-[var(--text-secondary)]">
               Manage requests from customers.
             </p>
 
           </div>
 
-
           {bookings.length === 0 ? (
 
-            <div className="rounded-2xl bg-white p-12 text-center shadow-sm">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-12 text-center shadow-sm">
 
               <div className="text-4xl">
                 📋
               </div>
 
-              <h3 className="mt-4 text-xl font-bold text-slate-900">
+              <h3 className="mt-4 text-xl font-bold text-[var(--text-primary)]">
                 No bookings yet
               </h3>
 
-              <p className="mt-2 text-gray-500">
+              <p className="mt-2 text-[var(--text-secondary)]">
                 New customer bookings will appear here.
               </p>
 
@@ -490,7 +423,7 @@ function ProfessionalDashboard() {
 
                 <div
                   key={booking._id}
-                  className="rounded-2xl bg-white p-6 shadow-sm"
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm"
                 >
 
                   {/* TOP */}
@@ -499,7 +432,7 @@ function ProfessionalDashboard() {
 
                     <div className="flex items-center gap-4">
 
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-600">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--primary-light)] text-xl font-bold text-[var(--primary)]">
                         {booking.customer?.fullName
                           ?.charAt(0)
                           ?.toUpperCase() || "C"}
@@ -507,12 +440,12 @@ function ProfessionalDashboard() {
 
                       <div>
 
-                        <h3 className="text-lg font-bold text-slate-900">
+                        <h3 className="text-lg font-bold text-[var(--text-primary)]">
                           {booking.customer?.fullName ||
                             "Customer"}
                         </h3>
 
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-[var(--text-secondary)]">
                           {booking.customer?.email ||
                             "Email unavailable"}
                         </p>
@@ -521,24 +454,23 @@ function ProfessionalDashboard() {
 
                     </div>
 
-
                     {/* STATUS */}
 
                     <span
                       className={`w-fit rounded-full px-4 py-2 text-sm font-medium ${
                         booking.bookingStatus ===
                         "Accepted"
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400"
                           : booking.bookingStatus ===
                             "Rejected"
-                          ? "bg-red-100 text-red-700"
+                          ? "bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400"
                           : booking.bookingStatus ===
                             "Completed"
-                          ? "bg-blue-100 text-blue-700"
+                          ? "bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400"
                           : booking.bookingStatus ===
                             "Cancelled"
-                          ? "bg-gray-100 text-gray-700"
-                          : "bg-yellow-100 text-yellow-700"
+                          ? "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                          : "bg-yellow-100 text-yellow-700 dark:bg-yellow-950/40 dark:text-yellow-400"
                       }`}
                     >
                       {booking.bookingStatus}
@@ -546,36 +478,27 @@ function ProfessionalDashboard() {
 
                   </div>
 
-
                   {/* BOOKING INFO */}
 
-                  <div className="mt-6 grid gap-5 border-t pt-6 sm:grid-cols-2 lg:grid-cols-4">
-
-                    {/* SERVICE */}
+                  <div className="mt-6 grid gap-5 border-t border-[var(--border)] pt-6 sm:grid-cols-2 lg:grid-cols-4">
 
                     <div>
-
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[var(--text-secondary)]">
                         Service
                       </p>
 
-                      <p className="mt-1 font-semibold text-slate-900">
+                      <p className="mt-1 font-semibold text-[var(--text-primary)]">
                         {booking.service?.title ||
                           "Service"}
                       </p>
-
                     </div>
 
-
-                    {/* DATE */}
-
                     <div>
-
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[var(--text-secondary)]">
                         Date & Time
                       </p>
 
-                      <p className="mt-1 font-semibold text-slate-900">
+                      <p className="mt-1 font-semibold text-[var(--text-primary)]">
                         {booking.bookingDate
                           ? new Date(
                               booking.bookingDate
@@ -584,7 +507,7 @@ function ProfessionalDashboard() {
                       </p>
 
                       {booking.bookingDate && (
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-[var(--text-secondary)]">
                           {new Date(
                             booking.bookingDate
                           ).toLocaleTimeString(
@@ -596,71 +519,57 @@ function ProfessionalDashboard() {
                           )}
                         </p>
                       )}
-
                     </div>
 
-
-                    {/* ADDRESS */}
-
                     <div>
-
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[var(--text-secondary)]">
                         Address
                       </p>
 
-                      <p className="mt-1 font-semibold text-slate-900">
-                        📍 {booking.address ||
+                      <p className="mt-1 font-semibold text-[var(--text-primary)]">
+                        📍{" "}
+                        {booking.address ||
                           "Not available"}
                       </p>
-
                     </div>
 
-
-                    {/* PRICE */}
-
                     <div>
-
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[var(--text-secondary)]">
                         Price
                       </p>
 
-                      <p className="mt-1 text-xl font-bold text-slate-900">
+                      <p className="mt-1 text-xl font-bold text-[var(--text-primary)]">
                         ₹
                         {booking.service?.price ||
                           booking.price ||
                           0}
                       </p>
-
                     </div>
 
                   </div>
 
-
                   {/* NOTES */}
 
                   {booking.notes && (
-                    <div className="mt-5 rounded-xl bg-slate-50 p-4">
+                    <div className="mt-5 rounded-xl bg-[var(--surface-secondary)] p-4">
 
-                      <p className="text-sm font-medium text-gray-500">
+                      <p className="text-sm font-medium text-[var(--text-secondary)]">
                         Customer Notes
                       </p>
 
-                      <p className="mt-1 text-gray-700">
+                      <p className="mt-1 text-[var(--text-primary)]">
                         {booking.notes}
                       </p>
 
                     </div>
                   )}
 
-
-                  {/* ACTIONS */}
+                  {/* ACCEPT / REJECT */}
 
                   {booking.bookingStatus ===
                     "Pending" && (
 
-                    <div className="mt-6 flex flex-col gap-3 border-t pt-5 sm:flex-row">
-
-                      {/* ACCEPT */}
+                    <div className="mt-6 flex flex-col gap-3 border-t border-[var(--border)] pt-5 sm:flex-row">
 
                       <button
                         onClick={() =>
@@ -680,9 +589,6 @@ function ProfessionalDashboard() {
                           ? "Updating..."
                           : "Accept Booking"}
                       </button>
-
-
-                      {/* REJECT */}
 
                       <button
                         onClick={() =>
@@ -704,7 +610,57 @@ function ProfessionalDashboard() {
                       </button>
 
                     </div>
+                  )}
 
+                  {/* COMPLETE */}
+
+                  {booking.bookingStatus ===
+                    "Accepted" && (
+
+                    <div className="mt-6 border-t border-[var(--border)] pt-5">
+
+                      <button
+                        onClick={() =>
+                          handleStatusUpdate(
+                            booking._id,
+                            "Completed"
+                          )
+                        }
+                        disabled={
+                          actionLoading ===
+                          booking._id
+                        }
+                        className="w-full rounded-lg bg-[var(--primary)] py-3 font-semibold text-white transition hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {actionLoading ===
+                        booking._id
+                          ? "Updating..."
+                          : "✓ Mark Service as Completed"}
+                      </button>
+
+                    </div>
+                  )}
+
+                  {/* COMPLETED */}
+
+                  {booking.bookingStatus ===
+                    "Completed" && (
+
+                    <div className="mt-6 border-t border-[var(--border)] pt-5">
+
+                      <div className="rounded-xl bg-[var(--primary-light)] p-4 text-center">
+
+                        <p className="font-semibold text-[var(--primary)]">
+                          ✓ Service Completed
+                        </p>
+
+                        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                          This booking has been successfully completed.
+                        </p>
+
+                      </div>
+
+                    </div>
                   )}
 
                 </div>
@@ -712,7 +668,6 @@ function ProfessionalDashboard() {
               ))}
 
             </div>
-
           )}
 
         </section>

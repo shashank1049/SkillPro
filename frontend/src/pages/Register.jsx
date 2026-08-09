@@ -140,9 +140,7 @@ function Register() {
         formData.avatar
       );
 
-      console.log(
-        "Registering user..."
-      );
+      console.log("Registering user...");
 
       const registerResponse =
         await api.post(
@@ -231,18 +229,17 @@ function Register() {
         error.response?.data?.message ||
           "Registration failed. Please try again."
       );
-
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-12">
+    <main className="min-h-screen bg-[var(--background)] px-4 py-12 transition-colors duration-300">
 
       <div className="mx-auto max-w-3xl">
 
-        <div className="rounded-2xl bg-white p-8 shadow-lg">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
 
           {/* =====================================
               HEADER
@@ -250,27 +247,25 @@ function Register() {
 
           <div className="mb-8 text-center">
 
-            <h1 className="text-3xl font-bold text-slate-900">
+            <h1 className="text-3xl font-bold text-[var(--text-primary)]">
               Create Your SkillPro Account
             </h1>
 
-            <p className="mt-2 text-gray-500">
+            <p className="mt-2 text-[var(--text-secondary)]">
               Join SkillPro and get started.
             </p>
 
           </div>
-
 
           {/* =====================================
               ERROR
           ====================================== */}
 
           {error && (
-            <div className="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-900 dark:bg-red-950/30">
               {error}
             </div>
           )}
-
 
           <form
             onSubmit={handleSubmit}
@@ -283,22 +278,21 @@ function Register() {
 
             <div>
 
-              <h2 className="text-xl font-bold text-slate-900">
+              <h2 className="text-xl font-bold text-[var(--text-primary)]">
                 Basic Information
               </h2>
 
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">
                 Tell us a little about yourself.
               </p>
 
             </div>
 
-
             {/* FULL NAME */}
 
             <div>
 
-              <label className="mb-2 block font-medium text-gray-700">
+              <label className="mb-2 block font-medium text-[var(--text-primary)]">
                 Full Name *
               </label>
 
@@ -309,11 +303,10 @@ function Register() {
                 onChange={handleChange}
                 placeholder="Enter your full name"
                 required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
               />
 
             </div>
-
 
             {/* USERNAME + EMAIL */}
 
@@ -321,7 +314,7 @@ function Register() {
 
               <div>
 
-                <label className="mb-2 block font-medium text-gray-700">
+                <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Username *
                 </label>
 
@@ -332,15 +325,14 @@ function Register() {
                   onChange={handleChange}
                   placeholder="Choose a username"
                   required
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
 
               </div>
 
-
               <div>
 
-                <label className="mb-2 block font-medium text-gray-700">
+                <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Email *
                 </label>
 
@@ -351,13 +343,12 @@ function Register() {
                   onChange={handleChange}
                   placeholder="you@example.com"
                   required
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
 
               </div>
 
             </div>
-
 
             {/* PASSWORD + PHONE */}
 
@@ -365,7 +356,7 @@ function Register() {
 
               <div>
 
-                <label className="mb-2 block font-medium text-gray-700">
+                <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Password *
                 </label>
 
@@ -376,15 +367,14 @@ function Register() {
                   onChange={handleChange}
                   placeholder="Minimum 8 characters"
                   required
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
 
               </div>
 
-
               <div>
 
-                <label className="mb-2 block font-medium text-gray-700">
+                <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Phone
                 </label>
 
@@ -394,19 +384,18 @@ function Register() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Enter phone number"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
 
               </div>
 
             </div>
 
-
             {/* CITY */}
 
             <div>
 
-              <label className="mb-2 block font-medium text-gray-700">
+              <label className="mb-2 block font-medium text-[var(--text-primary)]">
                 City
               </label>
 
@@ -416,17 +405,16 @@ function Register() {
                 value={formData.city}
                 onChange={handleChange}
                 placeholder="e.g. Noida"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
               />
 
             </div>
-
 
             {/* AVATAR */}
 
             <div>
 
-              <label className="mb-2 block font-medium text-gray-700">
+              <label className="mb-2 block font-medium text-[var(--text-primary)]">
                 Profile Picture *
               </label>
 
@@ -436,19 +424,18 @@ function Register() {
                 accept="image/*"
                 onChange={handleChange}
                 required
-                className="w-full rounded-lg border border-gray-300 p-3"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 text-[var(--text-primary)] file:mr-4 file:rounded-lg file:border-0 file:bg-[var(--primary-light)] file:px-4 file:py-2 file:font-medium file:text-[var(--primary)]"
               />
 
             </div>
-
 
             {/* =====================================
                 ROLE
             ====================================== */}
 
-            <div className="border-t pt-6">
+            <div className="border-t border-[var(--border)] pt-6">
 
-              <label className="mb-3 block font-medium text-gray-700">
+              <label className="mb-3 block font-medium text-[var(--text-primary)]">
                 Register As *
               </label>
 
@@ -459,8 +446,8 @@ function Register() {
                 <label
                   className={`cursor-pointer rounded-xl border p-5 transition ${
                     formData.role === "customer"
-                      ? "border-blue-600 bg-blue-50"
-                      : "border-gray-300 hover:border-blue-400"
+                      ? "border-[var(--primary)] bg-[var(--primary-light)]"
+                      : "border-[var(--border)] hover:border-[var(--primary)]"
                   }`}
                 >
 
@@ -473,27 +460,26 @@ function Register() {
                       "customer"
                     }
                     onChange={handleChange}
-                    className="mr-2"
+                    className="mr-2 accent-[var(--primary)]"
                   />
 
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-[var(--text-primary)]">
                     Customer
                   </span>
 
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-[var(--text-secondary)]">
                     Find and hire trusted professionals.
                   </p>
 
                 </label>
-
 
                 {/* PROFESSIONAL */}
 
                 <label
                   className={`cursor-pointer rounded-xl border p-5 transition ${
                     formData.role === "professional"
-                      ? "border-blue-600 bg-blue-50"
-                      : "border-gray-300 hover:border-blue-400"
+                      ? "border-[var(--primary)] bg-[var(--primary-light)]"
+                      : "border-[var(--border)] hover:border-[var(--primary)]"
                   }`}
                 >
 
@@ -506,14 +492,14 @@ function Register() {
                       "professional"
                     }
                     onChange={handleChange}
-                    className="mr-2"
+                    className="mr-2 accent-[var(--primary)]"
                   />
 
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-[var(--text-primary)]">
                     Professional
                   </span>
 
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-[var(--text-secondary)]">
                     Offer your skills and get hired.
                   </p>
 
@@ -523,33 +509,31 @@ function Register() {
 
             </div>
 
-
             {/* =====================================
                 PROFESSIONAL INFORMATION
             ====================================== */}
 
             {formData.role === "professional" && (
-              <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-6">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--primary-light)] p-6">
 
                 <div className="mb-6">
 
-                  <h2 className="text-xl font-bold text-slate-900">
+                  <h2 className="text-xl font-bold text-[var(--text-primary)]">
                     Professional Information
                   </h2>
 
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-[var(--text-secondary)]">
                     Add information about the services
                     you provide.
                   </p>
 
                 </div>
 
-
                 {/* PROFESSION */}
 
                 <div>
 
-                  <label className="mb-2 block font-medium text-gray-700">
+                  <label className="mb-2 block font-medium text-[var(--text-primary)]">
                     Profession *
                   </label>
 
@@ -563,17 +547,16 @@ function Register() {
                       formData.role ===
                       "professional"
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500"
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                   />
 
                 </div>
-
 
                 {/* BIO */}
 
                 <div className="mt-5">
 
-                  <label className="mb-2 block font-medium text-gray-700">
+                  <label className="mb-2 block font-medium text-[var(--text-primary)]">
                     Professional Bio
                   </label>
 
@@ -583,11 +566,10 @@ function Register() {
                     onChange={handleChange}
                     placeholder="Tell customers about your experience and services..."
                     rows="4"
-                    className="w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500"
+                    className="w-full resize-none rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                   />
 
                 </div>
-
 
                 {/* EXPERIENCE + PRICING */}
 
@@ -595,7 +577,7 @@ function Register() {
 
                   <div>
 
-                    <label className="mb-2 block font-medium text-gray-700">
+                    <label className="mb-2 block font-medium text-[var(--text-primary)]">
                       Experience (Years)
                     </label>
 
@@ -606,15 +588,14 @@ function Register() {
                       onChange={handleChange}
                       min="0"
                       placeholder="e.g. 5"
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                     />
 
                   </div>
 
-
                   <div>
 
-                    <label className="mb-2 block font-medium text-gray-700">
+                    <label className="mb-2 block font-medium text-[var(--text-primary)]">
                       Pricing *
                     </label>
 
@@ -629,19 +610,18 @@ function Register() {
                         formData.role ===
                         "professional"
                       }
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                     />
 
                   </div>
 
                 </div>
 
-
                 {/* SKILLS */}
 
                 <div className="mt-5">
 
-                  <label className="mb-2 block font-medium text-gray-700">
+                  <label className="mb-2 block font-medium text-[var(--text-primary)]">
                     Skills
                   </label>
 
@@ -651,21 +631,20 @@ function Register() {
                     value={formData.skills}
                     onChange={handleChange}
                     placeholder="e.g. SUV, Sedan, Luxury Cars"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500"
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                   />
 
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">
                     Separate multiple skills with commas.
                   </p>
 
                 </div>
 
-
                 {/* SERVICE AREAS */}
 
                 <div className="mt-5">
 
-                  <label className="mb-2 block font-medium text-gray-700">
+                  <label className="mb-2 block font-medium text-[var(--text-primary)]">
                     Service Areas
                   </label>
 
@@ -675,21 +654,20 @@ function Register() {
                     value={formData.serviceAreas}
                     onChange={handleChange}
                     placeholder="e.g. Noida, Delhi, Gurugram"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-500"
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                   />
 
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">
                     Separate multiple areas with commas.
                   </p>
 
                 </div>
 
-
                 {/* PORTFOLIO */}
 
                 <div className="mt-5">
 
-                  <label className="mb-2 block font-medium text-gray-700">
+                  <label className="mb-2 block font-medium text-[var(--text-primary)]">
                     Portfolio Images
                   </label>
 
@@ -699,10 +677,10 @@ function Register() {
                     accept="image/*"
                     multiple
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-gray-300 bg-white p-3"
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 text-[var(--text-primary)] file:mr-4 file:rounded-lg file:border-0 file:bg-[var(--primary-light)] file:px-4 file:py-2 file:font-medium file:text-[var(--primary)]"
                   />
 
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">
                     Add images that showcase your work.
                   </p>
 
@@ -711,7 +689,6 @@ function Register() {
               </div>
             )}
 
-
             {/* =====================================
                 SUBMIT
             ====================================== */}
@@ -719,7 +696,7 @@ function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-[var(--primary)] py-3 font-semibold text-white transition hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading
                 ? "Creating Account..."
@@ -730,16 +707,15 @@ function Register() {
 
           </form>
 
-
           {/* LOGIN */}
 
-          <p className="mt-6 text-center text-gray-600">
+          <p className="mt-6 text-center text-[var(--text-secondary)]">
 
             Already have an account?{" "}
 
             <Link
               to="/login"
-              className="font-semibold text-blue-600 hover:underline"
+              className="font-semibold text-[var(--primary)] transition hover:text-[var(--primary-hover)]"
             >
               Login
             </Link>

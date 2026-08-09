@@ -33,10 +33,10 @@ const categories = [
 
 function Categories() {
   return (
-    <section className="bg-white py-16">
+    <section className="bg-[var(--surface)] py-16 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6">
 
-        <h2 className="mb-10 text-center text-4xl font-bold">
+        <h2 className="mb-10 text-center text-4xl font-bold text-[var(--text-primary)]">
           Popular Categories
         </h2>
 
@@ -45,7 +45,7 @@ function Categories() {
           {categories.map((category) => (
             <div
               key={category.id}
-              className="cursor-pointer rounded-xl border p-6 text-center shadow-sm transition hover:-translate-y-2 hover:shadow-xl"
+              className="cursor-pointer rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 text-center text-[var(--text-primary)] shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl"
             >
               <div className="text-5xl">
                 {category.icon}
@@ -58,6 +58,7 @@ function Categories() {
           ))}
 
         </div>
+
       </div>
     </section>
   );

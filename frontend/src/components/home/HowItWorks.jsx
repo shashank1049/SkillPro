@@ -24,58 +24,42 @@ function HowItWorks() {
   ];
 
   return (
-    <section className="bg-white py-20">
+    <section className="bg-[var(--surface)] py-20 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6">
 
-        {/* SECTION HEADING START */}
-
         <div className="text-center">
-          <h2 className="text-4xl font-bold text-slate-900">
+
+          <h2 className="text-4xl font-bold text-[var(--text-primary)]">
             How It Works
           </h2>
 
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-[var(--text-secondary)]">
             Get the help you need in just three simple steps.
           </p>
+
         </div>
 
-        {/* SECTION HEADING END */}
-
-
-        {/* STEPS START */}
-
-        <div className="relative mt-16 grid gap-10 md:grid-cols-3">
+        <div className="mt-16 grid gap-10 md:grid-cols-3">
 
           {steps.map((step) => (
             <div
               key={step.number}
-              className="relative rounded-2xl border bg-slate-50 p-8 text-center shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+              className="relative rounded-2xl border border-[var(--border)] bg-[var(--surface-secondary)] p-8 text-center text-[var(--text-primary)] shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl"
             >
 
-              {/* Step Number */}
-
-              <div className="absolute right-5 top-5 text-sm font-bold text-blue-600">
+              <div className="absolute right-5 top-5 text-sm font-bold text-[var(--primary)]">
                 {step.number}
               </div>
 
-
-              {/* Icon */}
-
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 text-4xl">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[var(--primary-light)] text-4xl">
                 {step.icon}
               </div>
 
-
-              {/* Title */}
-
-              <h3 className="mt-6 text-2xl font-semibold text-slate-900">
+              <h3 className="mt-6 text-2xl font-semibold">
                 {step.title}
               </h3>
 
-
-              {/* Description */}
-
-              <p className="mt-4 leading-7 text-gray-600">
+              <p className="mt-4 leading-7 text-[var(--text-secondary)]">
                 {step.description}
               </p>
 
@@ -83,8 +67,6 @@ function HowItWorks() {
           ))}
 
         </div>
-
-        {/* STEPS END */}
 
       </div>
     </section>

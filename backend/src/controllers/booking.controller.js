@@ -157,7 +157,7 @@ const getProfessionalBookings=asyncHandler(async(req, res)=>{
     }
 
     const bookings=await Booking.find({
-        professiona:professional._id
+        professional:professional._id
     })
     .populate(
         "customer",

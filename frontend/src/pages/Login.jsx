@@ -29,18 +29,25 @@ function Login() {
       setLoading(true);
       setError("");
 
-      const response = await api.post("/auth/login", {
-        email: formData.email,
-        password: formData.password,
-      });
+      const response = await api.post(
+        "/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
 
-      console.log("Login Response:", response.data);
+      console.log(
+        "Login Response:",
+        response.data
+      );
 
-      // Login successful
       navigate("/");
-
     } catch (error) {
-      console.error("Login Error:", error);
+      console.error(
+        "Login Error:",
+        error
+      );
 
       setError(
         error.response?.data?.message ||
@@ -52,22 +59,24 @@ function Login() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 py-16">
+    <main className="min-h-screen bg-[var(--background)] px-6 py-16 transition-colors duration-300">
 
       <div className="mx-auto max-w-md">
 
-        <div className="rounded-2xl bg-white p-8 shadow-lg">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
 
-          <h1 className="text-center text-3xl font-bold text-slate-900">
+          <h1 className="text-center text-3xl font-bold text-[var(--text-primary)]">
             Welcome Back
           </h1>
 
-          <p className="mt-2 text-center text-gray-500">
+          <p className="mt-2 text-center text-[var(--text-secondary)]">
             Login to continue using SkillPro
           </p>
 
+          {/* ERROR */}
+
           {error && (
-            <div className="mt-6 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-900 dark:bg-red-950/30">
               {error}
             </div>
           )}
@@ -81,7 +90,7 @@ function Login() {
 
             <div>
 
-              <label className="mb-2 block font-medium text-gray-700">
+              <label className="mb-2 block font-medium text-[var(--text-primary)]">
                 Email
               </label>
 
@@ -92,17 +101,16 @@ function Login() {
                 onChange={handleChange}
                 placeholder="Enter your email"
                 required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
               />
 
             </div>
-
 
             {/* PASSWORD */}
 
             <div>
 
-              <label className="mb-2 block font-medium text-gray-700">
+              <label className="mb-2 block font-medium text-[var(--text-primary)]">
                 Password
               </label>
 
@@ -113,34 +121,34 @@ function Login() {
                 onChange={handleChange}
                 placeholder="Enter your password"
                 required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
               />
 
             </div>
-
 
             {/* LOGIN BUTTON */}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-[var(--primary)] py-3 font-semibold text-white transition hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading
+                ? "Logging in..."
+                : "Login"}
             </button>
 
           </form>
 
-
           {/* REGISTER */}
 
-          <p className="mt-6 text-center text-gray-600">
+          <p className="mt-6 text-center text-[var(--text-secondary)]">
 
             Don't have an account?{" "}
 
             <Link
               to="/register"
-              className="font-semibold text-blue-600 hover:text-blue-700"
+              className="font-semibold text-[var(--primary)] transition hover:text-[var(--primary-hover)]"
             >
               Register
             </Link>

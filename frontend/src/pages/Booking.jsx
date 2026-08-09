@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 
 function Booking() {
   const { professionalId, serviceId } = useParams();
+  const navigate = useNavigate();
 
   const [professional, setProfessional] = useState(null);
   const [service, setService] = useState(null);
@@ -21,17 +22,12 @@ function Booking() {
     notes: "",
   });
 
-  // ==========================================
-  // FETCH PROFESSIONAL + SERVICE
-  // ==========================================
-
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
         setLoading(true);
         setError("");
 
-        // Fetch Professional
         const professionalResponse = await api.get(
           `/professional/${professionalId}`
         );
@@ -45,7 +41,6 @@ function Booking() {
           professionalResponse.data?.data
         );
 
-        // Fetch Services
         const servicesResponse = await api.get(
           "/service"
         );
@@ -58,9 +53,9 @@ function Booking() {
         const allServices =
           servicesResponse.data?.data?.services || [];
 
-        // Find selected service
         const selectedService = allServices.find(
-          (item) => item._id === serviceId
+          (item) =>
+            String(item._id) === String(serviceId)
         );
 
         console.log(
@@ -73,8 +68,18 @@ function Booking() {
           return;
         }
 
-        setService(selectedService);
+        if (
+          String(
+            selectedService.professional?._id
+          ) !== String(professionalId)
+        ) {
+          setError(
+            "This service does not belong to this professional."
+          );
+          return;
+        }
 
+        setService(selectedService);
       } catch (error) {
         console.error(
           "Error fetching booking details:",
@@ -93,10 +98,6 @@ function Booking() {
     fetchBookingDetails();
   }, [professionalId, serviceId]);
 
-  // ==========================================
-  // HANDLE INPUT CHANGE
-  // ==========================================
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -106,10 +107,6 @@ function Booking() {
     }));
   };
 
-  // ==========================================
-  // CREATE BOOKING
-  // ==========================================
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -118,44 +115,62 @@ function Booking() {
       setError("");
       setSuccess("");
 
-      // Combine date + time
-      const bookingDate = `${bookingData.date}T${bookingData.time}`;
+      if (!bookingData.date) {
+        setError("Please select a service date.");
+        return;
+      }
 
-      console.log("Sending Booking:", {
+      if (!bookingData.time) {
+        setError("Please select a preferred time.");
+        return;
+      }
+
+      if (!bookingData.address.trim()) {
+        setError("Please enter the service address.");
+        return;
+      }
+
+      const bookingDate =
+        `${bookingData.date}T${bookingData.time}`;
+
+      const bookingPayload = {
         serviceId,
         bookingDate,
-        address: bookingData.address,
-        notes: bookingData.notes,
-      });
+        address: bookingData.address.trim(),
+        notes: bookingData.notes.trim(),
+      };
 
-      // POST REQUEST TO BACKEND
-      const response = await api.post(
+      console.log(
+        "Sending Booking:",
+        bookingPayload
+      );
+
+      const bookingResponse = await api.post(
         "/booking/create",
-        {
-          serviceId,
-          bookingDate,
-          address: bookingData.address,
-          notes: bookingData.notes,
-        }
+        bookingPayload
       );
 
       console.log(
         "Booking Created:",
-        response.data
+        bookingResponse.data
       );
+
+      const booking =
+        bookingResponse.data?.data;
+
+      if (!booking?._id) {
+        throw new Error(
+          "Booking was not created."
+        );
+      }
 
       setSuccess(
-        "Booking created successfully!"
+        "Booking request sent successfully! Waiting for professional approval."
       );
 
-      // Clear form
-      setBookingData({
-        date: "",
-        time: "",
-        address: "",
-        notes: "",
-      });
-
+      setTimeout(() => {
+        navigate("/my-bookings");
+      }, 1200);
     } catch (error) {
       console.error(
         "Booking Error:",
@@ -164,6 +179,7 @@ function Booking() {
 
       setError(
         error.response?.data?.message ||
+          error.message ||
           "Unable to create booking."
       );
     } finally {
@@ -171,40 +187,35 @@ function Booking() {
     }
   };
 
-  // ==========================================
-  // LOADING
-  // ==========================================
-
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-50">
-        <p className="text-lg text-gray-500">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--background)]">
+        <p className="text-lg text-[var(--text-secondary)]">
           Loading booking details...
         </p>
       </main>
     );
   }
 
-  // ==========================================
-  // ERROR
-  // ==========================================
-
-  if (error && (!professional || !service)) {
+  if (
+    error &&
+    (!professional || !service)
+  ) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6">
         <div className="text-center">
 
           <h2 className="text-2xl font-bold text-red-600">
             Unable to load booking
           </h2>
 
-          <p className="mt-3 text-gray-500">
+          <p className="mt-3 text-[var(--text-secondary)]">
             {error}
           </p>
 
           <Link
             to="/services"
-            className="mt-6 inline-block rounded-lg bg-blue-600 px-6 py-3 text-white hover:bg-blue-700"
+            className="mt-6 inline-block rounded-lg bg-[var(--primary)] px-6 py-3 text-white transition hover:bg-[var(--primary-hover)]"
           >
             Back to Services
           </Link>
@@ -214,24 +225,18 @@ function Booking() {
     );
   }
 
-  // ==========================================
-  // MAIN UI
-  // ==========================================
-
   return (
-    <main className="min-h-screen bg-slate-50 py-12">
+    <main className="min-h-screen bg-[var(--background)] py-12 transition-colors duration-300">
 
       <div className="mx-auto max-w-5xl px-6">
 
         <div className="grid gap-8 lg:grid-cols-3">
 
-          {/* =================================
-              PROFESSIONAL SUMMARY
-          ================================== */}
+          {/* PROFESSIONAL */}
 
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
 
-            <h2 className="text-xl font-bold text-slate-900">
+            <h2 className="text-xl font-bold text-[var(--text-primary)]">
               Professional
             </h2>
 
@@ -241,50 +246,52 @@ function Booking() {
                 "https://via.placeholder.com/150"
               }
               alt={professional.owner?.fullName}
-              className="mx-auto mt-6 h-28 w-28 rounded-full border-4 border-blue-500 object-cover"
+              className="mx-auto mt-6 h-28 w-28 rounded-full border-4 border-[var(--primary)] object-cover"
             />
 
-            <h3 className="mt-5 text-center text-2xl font-bold">
+            <h3 className="mt-5 text-center text-2xl font-bold text-[var(--text-primary)]">
               {professional.owner?.fullName}
             </h3>
 
-            <p className="mt-1 text-center font-medium text-blue-600">
+            <p className="mt-1 text-center font-medium text-[var(--primary)]">
               {professional.profession}
             </p>
 
-            <p className="mt-3 text-center text-gray-500">
+            <p className="mt-3 text-center text-[var(--text-secondary)]">
               📍 {professional.owner?.city}
             </p>
 
-            <div className="mt-6 border-t pt-5">
+            <div className="mt-6 border-t border-[var(--border)] pt-5">
 
               <div className="flex justify-between">
-                <span className="text-gray-500">
+                <span className="text-[var(--text-secondary)]">
                   Rating
                 </span>
 
-                <span>
+                <span className="text-[var(--text-primary)]">
                   ⭐ {professional.rating || 0}
                 </span>
               </div>
 
               <div className="mt-3 flex justify-between">
-                <span className="text-gray-500">
+                <span className="text-[var(--text-secondary)]">
                   Experience
                 </span>
 
-                <span>
+                <span className="text-[var(--text-primary)]">
                   {professional.experience || 0} years
                 </span>
               </div>
 
               <div className="mt-3 flex justify-between">
-                <span className="text-gray-500">
-                  Price
+                <span className="text-[var(--text-secondary)]">
+                  Service Price
                 </span>
 
-                <span className="font-bold">
-                  ₹{service?.price || professional.pricing}
+                <span className="font-bold text-[var(--text-primary)]">
+                  ₹
+                  {service?.price ||
+                    professional.pricing}
                 </span>
               </div>
 
@@ -292,40 +299,36 @@ function Booking() {
 
           </div>
 
+          {/* BOOKING FORM */}
 
-          {/* =================================
-              BOOKING FORM
-          ================================== */}
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm lg:col-span-2">
 
-          <div className="rounded-2xl bg-white p-8 shadow-sm lg:col-span-2">
-
-            <h1 className="text-3xl font-bold text-slate-900">
+            <h1 className="text-3xl font-bold text-[var(--text-primary)]">
               Book a Professional
             </h1>
 
-            <p className="mt-2 text-gray-500">
-              Choose your preferred date and time.
+            <p className="mt-2 text-[var(--text-secondary)]">
+              Send a booking request and wait for the professional to accept it.
             </p>
 
-
-            {/* SELECTED SERVICE */}
+            {/* SERVICE */}
 
             {service && (
-              <div className="mt-6 rounded-xl bg-blue-50 p-5">
+              <div className="mt-6 rounded-xl bg-[var(--primary-light)] p-5">
 
-                <p className="text-sm font-medium text-blue-600">
+                <p className="text-sm font-medium text-[var(--primary)]">
                   Selected Service
                 </p>
 
-                <h2 className="mt-1 text-xl font-bold text-slate-900">
+                <h2 className="mt-1 text-xl font-bold text-[var(--text-primary)]">
                   {service.title}
                 </h2>
 
-                <p className="mt-1 text-gray-600">
+                <p className="mt-1 text-[var(--text-secondary)]">
                   {service.description}
                 </p>
 
-                <div className="mt-3 flex gap-6 text-sm">
+                <div className="mt-3 flex gap-6 text-sm text-[var(--text-primary)]">
 
                   <span>
                     💰 ₹{service.price}
@@ -340,24 +343,21 @@ function Booking() {
               </div>
             )}
 
-
             {/* ERROR */}
 
             {error && (
-              <div className="mt-6 rounded-lg bg-red-50 p-4 text-red-600">
+              <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-600 dark:border-red-900 dark:bg-red-950/30">
                 {error}
               </div>
             )}
 
-
             {/* SUCCESS */}
 
             {success && (
-              <div className="mt-6 rounded-lg bg-green-50 p-4 font-medium text-green-700">
+              <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4 font-medium text-green-700 dark:border-green-900 dark:bg-green-950/30">
                 {success}
               </div>
             )}
-
 
             {/* FORM */}
 
@@ -370,7 +370,7 @@ function Booking() {
 
               <div>
 
-                <label className="mb-2 block font-medium text-gray-700">
+                <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Service Date
                 </label>
 
@@ -385,17 +385,16 @@ function Booking() {
                       .split("T")[0]
                   }
                   required
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
 
               </div>
-
 
               {/* TIME */}
 
               <div>
 
-                <label className="mb-2 block font-medium text-gray-700">
+                <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Preferred Time
                 </label>
 
@@ -405,17 +404,16 @@ function Booking() {
                   value={bookingData.time}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
 
               </div>
-
 
               {/* ADDRESS */}
 
               <div>
 
-                <label className="mb-2 block font-medium text-gray-700">
+                <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Service Address
                 </label>
 
@@ -426,17 +424,16 @@ function Booking() {
                   placeholder="Enter the address where service is required"
                   rows="3"
                   required
-                  className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full resize-none rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
 
               </div>
-
 
               {/* NOTES */}
 
               <div>
 
-                <label className="mb-2 block font-medium text-gray-700">
+                <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Additional Notes
                 </label>
 
@@ -446,42 +443,46 @@ function Booking() {
                   onChange={handleChange}
                   placeholder="Any additional information for the professional..."
                   rows="4"
-                  className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full resize-none rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
 
               </div>
 
+              {/* PRICE */}
 
-              {/* PRICE SUMMARY */}
-
-              <div className="rounded-xl bg-slate-50 p-5">
+              <div className="rounded-xl bg-[var(--surface-secondary)] p-5">
 
                 <div className="flex items-center justify-between">
 
-                  <span className="text-gray-600">
+                  <span className="text-[var(--text-secondary)]">
                     Service Price
                   </span>
 
-                  <span className="text-xl font-bold text-slate-900">
-                    ₹{service?.price || professional.pricing}
+                  <span className="text-xl font-bold text-[var(--text-primary)]">
+                    ₹
+                    {service?.price ||
+                      professional.pricing}
                   </span>
 
                 </div>
 
               </div>
 
-
               {/* SUBMIT */}
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-lg bg-[var(--primary)] py-3 font-semibold text-white transition hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {submitting
-                  ? "Creating Booking..."
-                  : "Continue to Booking"}
+                  ? "Sending Request..."
+                  : "Send Booking Request"}
               </button>
+
+              <p className="text-center text-sm text-[var(--text-secondary)]">
+                You will be able to pay after the professional accepts your booking.
+              </p>
 
             </form>
 
