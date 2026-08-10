@@ -33,7 +33,7 @@ function WhyChooseUs() {
         <div className="text-center">
 
           <h2 className="text-4xl font-bold text-[var(--text-primary)]">
-            Why Choose SkillPro?
+            Why Choose HirePro?
           </h2>
 
           <p className="mt-4 text-lg text-[var(--text-secondary)]">

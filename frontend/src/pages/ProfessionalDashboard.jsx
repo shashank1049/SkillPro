@@ -140,7 +140,7 @@ function ProfessionalDashboard() {
 
             <p className="mx-auto mt-4 max-w-xl text-lg leading-7 text-[var(--text-secondary)]">
               Have a skill that you want to offer?
-              Join SkillPro as a professional and
+              Join HirePro as a professional and
               connect with customers looking for
               your services.
             </p>
@@ -210,7 +210,7 @@ function ProfessionalDashboard() {
             </div>
 
             <p className="mt-6 text-sm text-[var(--text-secondary)]">
-              Already offering services on SkillPro?
+              Already offering services on HirePro?
               Login to manage your professional account.
             </p>
 

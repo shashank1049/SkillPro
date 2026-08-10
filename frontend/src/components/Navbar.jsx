@@ -12,7 +12,7 @@ function Navbar() {
 
   useEffect(() => {
     const savedTheme =
-      localStorage.getItem("skillpro-theme");
+      localStorage.getItem("HirePro-theme");
 
     if (savedTheme === "dark") {
       setDarkMode(true);
@@ -43,7 +43,7 @@ function Navbar() {
     if (newMode) {
       document.documentElement.classList.add("dark");
       localStorage.setItem(
-        "skillpro-theme",
+        "HirePro-theme",
         "dark"
       );
     } else {
@@ -51,7 +51,7 @@ function Navbar() {
         "dark"
       );
       localStorage.setItem(
-        "skillpro-theme",
+        "HirePro-theme",
         "light"
       );
     }
@@ -90,10 +90,13 @@ function Navbar() {
         {/* LOGO */}
 
         <Link
-          to="/"
-          className="text-2xl font-bold text-[var(--primary)]"
-        >
-          SkillPro
+              to="/"
+              className="text-2xl font-bold text-[var(--text-primary)]"
+            >
+              Hire
+              <span className="text-[var(--primary)]">
+                Pro
+              </span>
         </Link>
 
         {/* NAVIGATION */}

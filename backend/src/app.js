@@ -24,7 +24,7 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 app.get("/api/v1/health", (req, res) => {
-    res.status(200).json({ success: true, message: "SkillPro API is running" });
+    res.status(200).json({ success: true, message: "HirePro API is running" });
 });
 
 

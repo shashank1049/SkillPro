@@ -12,40 +12,131 @@ function Home() {
       {/* HERO SECTION */}
 
       <section className="bg-[var(--background)] text-[var(--text-primary)] transition-colors duration-300">
-        <div className="mx-auto flex min-h-[90vh] max-w-7xl flex-col items-center justify-center px-6 text-center">
 
-          <h1 className="text-5xl font-bold leading-tight text-[var(--text-primary)] md:text-7xl">
-            Hire Trusted{" "}
-            <span className="text-[var(--primary)]">
-              Professionals
-            </span>
-          </h1>
+        <div className="mx-auto flex min-h-[85vh] max-w-7xl items-center px-6 py-16">
 
-          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-            Find verified drivers, plumbers, electricians,
-            mechanics, tutors and many more skilled professionals
-            near you.
-          </p>
+          <div className="grid w-full items-center gap-12 lg:grid-cols-2">
 
-          <div className="mt-10 flex gap-5">
+            {/* LEFT CONTENT */}
 
-            <Link
-              to="/services"
-              className="rounded-lg bg-[var(--primary)] px-8 py-3 text-white transition hover:bg-[var(--primary-hover)]"
-            >
-              Find Services
-            </Link>
+            <div className="text-center lg:text-left">
 
-            <Link
-              to="/register"
-              className="rounded-lg border border-[var(--primary)] px-8 py-3 text-[var(--primary)] transition hover:bg-[var(--primary-light)]"
-            >
-              Become a Professional
-            </Link>
+              <div className="mb-5 inline-flex rounded-full bg-[var(--primary-light)] px-4 py-2 text-sm font-semibold text-[var(--primary)]">
+                Trusted professionals, one platform
+              </div>
+
+              <h1 className="text-5xl font-bold leading-tight text-[var(--text-primary)] md:text-6xl lg:text-7xl">
+                Hire Trusted{" "}
+                <span className="text-[var(--primary)]">
+                  Professionals
+                </span>
+                <br />
+                For Every Job
+              </h1>
+
+              <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--text-secondary)]">
+                From plumbers and electricians to drivers,
+                mechanics, tutors and developers — find
+                skilled professionals you can trust, right
+                when you need them.
+              </p>
+
+              {/* BUTTONS */}
+
+              <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+
+                <Link
+                  to="/services"
+                  className="rounded-lg bg-[var(--primary)] px-8 py-3.5 text-center font-semibold text-white transition hover:bg-[var(--primary-hover)]"
+                >
+                  Find Services
+                </Link>
+
+                <Link
+                  to="/register"
+                  className="rounded-lg border border-[var(--primary)] px-8 py-3.5 text-center font-semibold text-[var(--primary)] transition hover:bg-[var(--primary-light)]"
+                >
+                  Become a Professional
+                </Link>
+
+              </div>
+
+              {/* TRUST INFO */}
+
+              <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm text-[var(--text-secondary)] lg:justify-start">
+
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">✓</span>
+                  Verified Professionals
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">✓</span>
+                  Secure Payments
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">✓</span>
+                  Easy Booking
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* RIGHT IMAGE */}
+
+            <div className="relative">
+
+              {/* Decorative background */}
+
+              <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-[var(--primary-light)] opacity-60 blur-2xl" />
+
+              <div className="absolute -bottom-6 -left-6 h-40 w-40 rounded-full bg-[var(--primary-light)] opacity-40 blur-3xl" />
+
+              {/* IMAGE CARD */}
+
+              <div className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-3 shadow-xl">
+
+                <img
+                  src="/images/hero.png"
+                  alt="HirePro professionals"
+                  className="h- w-full rounded-2xl object-cover"
+                />
+
+              </div>
+
+              {/* FLOATING CARD */}
+
+              <div className="absolute -bottom-5 -left-5 hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg sm:block">
+
+                <div className="flex items-center gap-3">
+
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-950/40">
+                    ✓
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-[var(--text-primary)]">
+                      Trusted Professionals
+                    </p>
+
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Ready to help you
+                    </p>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
 
           </div>
 
         </div>
+
       </section>
 
       <Categories />

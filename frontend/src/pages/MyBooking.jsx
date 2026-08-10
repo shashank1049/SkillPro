@@ -25,6 +25,7 @@ function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [authRequired, setAuthRequired] = useState(false);
 
   const [payingBookingId, setPayingBookingId] =
     useState(null);
@@ -39,32 +40,42 @@ function MyBookings() {
 
   useEffect(() => {
     const fetchBookings = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+
+      if (!accessToken) {
+        setAuthRequired(true);
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
         setError("");
+        setAuthRequired(false);
 
-        const response = await api.get(
-          "/booking/my-bookings"
-        );
+        const response = await api.get("/booking/my-bookings");
 
-        console.log(
-          "My Bookings:",
-          response.data
-        );
+        console.log("My Bookings:", response.data);
 
-        setBookings(
-          response.data?.data || []
-        );
+        setBookings(response.data?.data || []);
       } catch (error) {
-        console.error(
-          "Error fetching bookings:",
-          error
-        );
+        console.error("Error fetching bookings:", error);
 
-        setError(
-          error.response?.data?.message ||
-            "Unable to load bookings."
-        );
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "";
+
+        if (
+          status === 401 ||
+          message.toLowerCase().includes("authentication token") ||
+          message.toLowerCase().includes("token is required") ||
+          message.toLowerCase().includes("unauthorized")
+        ) {
+          setAuthRequired(true);
+          setBookings([]);
+          setError("");
+        } else {
+          setError(message || "Unable to load bookings.");
+        }
       } finally {
         setLoading(false);
       }
@@ -121,11 +132,11 @@ function MyBookings() {
         currency:
           order.currency || "INR",
 
-        name: "SkillPro",
+        name: "HirePro",
 
         description:
           booking.service?.title ||
-          "SkillPro Service Booking",
+          "HirePro Service Booking",
 
         order_id: order.id,
 
@@ -293,6 +304,60 @@ function MyBookings() {
         <p className="text-lg text-[var(--text-secondary)]">
           Loading your bookings...
         </p>
+      </main>
+    );
+  }
+
+  if (authRequired) {
+    return (
+      <main className="min-h-screen bg-[var(--background)] py-12 transition-colors duration-300">
+        <div className="mx-auto max-w-6xl px-6">
+
+          <div className="mb-10">
+            <h1 className="text-3xl font-bold text-[var(--text-primary)]">
+              My Bookings
+            </h1>
+
+            <p className="mt-2 text-[var(--text-secondary)]">
+              Track and manage your service bookings.
+            </p>
+          </div>
+
+          <div className="flex min-h-[360px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-6 py-12 text-center shadow-sm">
+
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--primary-light)] text-3xl">
+              🔐
+            </div>
+
+            <h2 className="mt-5 text-2xl font-bold text-[var(--text-primary)]">
+              Please login to see your bookings
+            </h2>
+
+            <p className="mt-3 max-w-md text-[var(--text-secondary)]">
+              Login to your HirePro account to view and manage
+              all your service bookings.
+            </p>
+
+            <Link
+              to="/login"
+              className="mt-7 rounded-xl bg-[var(--primary)] px-7 py-3 font-semibold text-white transition hover:bg-[var(--primary-hover)]"
+            >
+              Login to Continue
+            </Link>
+
+            <p className="mt-4 text-sm text-[var(--text-secondary)]">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="font-semibold text-[var(--primary)] hover:underline"
+              >
+                Create one
+              </Link>
+            </p>
+
+          </div>
+
+        </div>
       </main>
     );
   }

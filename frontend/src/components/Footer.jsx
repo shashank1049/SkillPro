@@ -18,7 +18,7 @@ function Footer() {
               to="/"
               className="text-2xl font-bold text-[var(--text-primary)]"
             >
-              Skill
+              Hire
               <span className="text-[var(--primary)]">
                 Pro
               </span>
@@ -106,7 +106,7 @@ function Footer() {
                   to="/about"
                   className="transition hover:text-[var(--primary)]"
                 >
-                  About SkillPro
+                  About HirePro
                 </Link>
               </li>
 
@@ -145,7 +145,7 @@ function Footer() {
               <p>📍 Noida, Uttar Pradesh</p>
 
               <p>
-                📧 support@skillpro.com
+                📧 hirePro@hirepro.com
               </p>
 
               <p>
@@ -167,14 +167,14 @@ function Footer() {
         <div className="flex flex-col items-center justify-between gap-4 text-sm md:flex-row">
 
           <p className="text-[var(--text-secondary)]">
-            © {new Date().getFullYear()} SkillPro.
+            © {new Date().getFullYear()} HirePro.
             All rights reserved.
           </p>
 
           <div className="flex gap-5">
 
             <a
-              href="https://github.com/shashank1049/SkillPro"
+              href="https://github.com/shashank1049/HirePro"
               target="_blank"
               rel="noopener noreferrer"
               className="transition hover:text-[var(--primary)]"

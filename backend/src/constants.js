@@ -1,1 +1,1 @@
-export const DB_NAME="skillpro";
+export const DB_NAME="hirepro";

@@ -6,12 +6,16 @@ function Login() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    email: "",
+    identifier: "",
     password: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // ==========================================
+  // HANDLE INPUT
+  // ==========================================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,19 +26,49 @@ function Login() {
     }));
   };
 
+  // ==========================================
+  // LOGIN
+  // ==========================================
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setError("");
+
+    const identifier = formData.identifier.trim();
+
+    if (!identifier) {
+      setError("Please enter your email or username.");
+      return;
+    }
+
+    if (!formData.password) {
+      setError("Please enter your password.");
+      return;
+    }
+
     try {
       setLoading(true);
-      setError("");
+
+      // Check whether user entered email or username
+      const isEmail = identifier.includes("@");
+
+      const loginData = {
+        password: formData.password,
+        ...(isEmail
+          ? {
+              email: identifier.toLowerCase(),
+            }
+          : {
+              username: identifier.toLowerCase(),
+            }),
+      };
+
+      console.log("Login Data:", loginData);
 
       const response = await api.post(
         "/auth/login",
-        {
-          email: formData.email,
-          password: formData.password,
-        }
+        loginData
       );
 
       console.log(
@@ -42,7 +76,42 @@ function Login() {
         response.data
       );
 
+      // ========================================
+      // SAVE LOGIN DATA
+      // ========================================
+
+      const data = response.data?.data;
+
+      if (data?.accessToken) {
+        localStorage.setItem(
+          "accessToken",
+          data.accessToken
+        );
+      }
+
+      if (data?.refreshToken) {
+        localStorage.setItem(
+          "refreshToken",
+          data.refreshToken
+        );
+      }
+
+      if (data?.user) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user)
+        );
+      }
+
+      // ========================================
+      // REDIRECT
+      // ========================================
+
       navigate("/");
+
+      // Refresh so Navbar immediately detects user
+      window.location.reload();
+
     } catch (error) {
       console.error(
         "Login Error:",
@@ -51,7 +120,7 @@ function Login() {
 
       setError(
         error.response?.data?.message ||
-          "Login failed. Please check your credentials."
+          "Login failed. Please check your email/username and password."
       );
     } finally {
       setLoading(false);
@@ -59,21 +128,27 @@ function Login() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--background)] px-6 py-16 transition-colors duration-300">
+    <main className="min-h-screen bg-[var(--background)] px-6 py-12 transition-colors duration-300">
 
       <div className="mx-auto max-w-md">
 
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
+
+          {/* =====================================
+              HEADING
+          ====================================== */}
 
           <h1 className="text-center text-3xl font-bold text-[var(--text-primary)]">
             Welcome Back
           </h1>
 
           <p className="mt-2 text-center text-[var(--text-secondary)]">
-            Login to continue using SkillPro
+            Login to continue using HirePro
           </p>
 
-          {/* ERROR */}
+          {/* =====================================
+              ERROR
+          ====================================== */}
 
           {error && (
             <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-900 dark:bg-red-950/30">
@@ -81,26 +156,31 @@ function Login() {
             </div>
           )}
 
+          {/* =====================================
+              FORM
+          ====================================== */}
+
           <form
             onSubmit={handleSubmit}
             className="mt-8 space-y-5"
           >
 
-            {/* EMAIL */}
+            {/* EMAIL / USERNAME */}
 
             <div>
 
               <label className="mb-2 block font-medium text-[var(--text-primary)]">
-                Email
+                Email or Username
               </label>
 
               <input
-                type="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                name="identifier"
+                value={formData.identifier}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="Enter email or username"
                 required
+                autoComplete="username"
                 className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
               />
 
@@ -121,6 +201,7 @@ function Login() {
                 onChange={handleChange}
                 placeholder="Enter your password"
                 required
+                autoComplete="current-password"
                 className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
               />
 
@@ -140,7 +221,9 @@ function Login() {
 
           </form>
 
-          {/* REGISTER */}
+          {/* =====================================
+              REGISTER
+          ====================================== */}
 
           <p className="mt-6 text-center text-[var(--text-secondary)]">
 

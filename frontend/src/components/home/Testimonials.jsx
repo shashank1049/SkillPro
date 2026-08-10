@@ -4,7 +4,7 @@ function Testimonials() {
       name: "Aman Sharma",
       role: "Customer",
       review:
-        "SkillPro made it really easy to find a reliable professional. The booking process was simple and quick.",
+        "HirePro made it really easy to find a reliable professional. The booking process was simple and quick.",
       rating: 5,
     },
     {
@@ -18,7 +18,7 @@ function Testimonials() {
       name: "Rahul Verma",
       role: "Professional",
       review:
-        "SkillPro is a great platform for professionals to connect with customers and grow their work.",
+        "HirePro is a great platform for professionals to connect with customers and grow their work.",
       rating: 4,
     },
   ];
@@ -34,7 +34,7 @@ function Testimonials() {
           </h2>
 
           <p className="mt-4 text-lg text-[var(--text-secondary)]">
-            See what our customers and professionals think about SkillPro.
+            See what our customers and professionals think about HirePro.
           </p>
 
         </div>

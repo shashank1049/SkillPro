@@ -424,7 +424,7 @@ function ProfessionalDetails() {
 
                     <p className="mt-3 line-clamp-3 text-sm leading-6 text-[var(--text-secondary)]">
                       {service.description ||
-                        "Professional service available on SkillPro."}
+                        "Professional service available on HirePro."}
                     </p>
 
                     {/* PRICE + DURATION */}

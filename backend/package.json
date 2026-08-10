@@ -1,5 +1,5 @@
 {
-  "name": "skillpro",
+  "name": "hirepro",
   "version": "1.0.0",
   "description": "Project to hire skills",
   "keywords": [
@@ -7,13 +7,13 @@
     "React",
     "JavaScript"
   ],
-  "homepage": "https://github.com/shashank1049/SkillPro#readme",
+  "homepage": "https://github.com/shashank1049/HirePro#readme",
   "bugs": {
-    "url": "https://github.com/shashank1049/SkillPro/issues"
+    "url": "https://github.com/shashank1049/HirePro/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shashank1049/SkillPro.git"
+    "url": "git+https://github.com/shashank1049/HirePro.git"
   },
   "license": "ISC",
   "author": "Shashank Mishra",

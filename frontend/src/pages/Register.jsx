@@ -248,11 +248,11 @@ function Register() {
           <div className="mb-8 text-center">
 
             <h1 className="text-3xl font-bold text-[var(--text-primary)]">
-              Create Your SkillPro Account
+              Create Your Account
             </h1>
 
             <p className="mt-2 text-[var(--text-secondary)]">
-              Join SkillPro and get started.
+              Join HirePro and get started.
             </p>
 
           </div>

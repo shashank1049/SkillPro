@@ -11,7 +11,7 @@ function CTASection() {
 
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-7 text-white/80">
           Whether you need a driver, plumber, electrician, mechanic or
-          any other skilled professional, SkillPro helps you find the
+          any other skilled professional, HirePro helps you find the
           right person for the job.
         </p>
 
