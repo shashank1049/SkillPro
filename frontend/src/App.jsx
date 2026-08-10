@@ -11,6 +11,7 @@ import Booking from "./pages/Booking";
 import MyBookings from "./pages/MyBooking";
 import BookingDetails from "./pages/BookingDetails";
 import ProfessionalDashboard from "./pages/ProfessionalDashboard";
+import Profile from "./pages/Profile";
 
 
 
@@ -36,6 +37,8 @@ function App() {
             path="/booking/:professionalId/:serviceId"
             element={<Booking />}
           />
+
+          <Route path="/profile" element={<Profile />} />
 
           <Route
             path="/my-bookings"

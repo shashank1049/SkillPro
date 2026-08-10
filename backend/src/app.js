@@ -40,7 +40,6 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
-console.log("🔥 HIREPRO APP.JS LOADED");
 
 app.get("/", (req, res) => {
     res.status(200).send(

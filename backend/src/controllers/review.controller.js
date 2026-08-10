@@ -5,6 +5,7 @@ import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
+
 const createReview = asyncHandler(async (req, res) => {
 
     const {
@@ -43,7 +44,10 @@ const createReview = asyncHandler(async (req, res) => {
         );
     }
 
-    if (booking.customer.toString() !== req.user._id.toString()) {
+    if (
+        booking.customer.toString() !==
+        req.user._id.toString()
+    ) {
         throw new ApiError(
             403,
             "You can review only your own bookings"
@@ -77,6 +81,7 @@ const createReview = asyncHandler(async (req, res) => {
     });
 
     // Update Professional Rating
+
     const reviews = await Review.find({
         professional: booking.professional
     });
@@ -90,22 +95,25 @@ const createReview = asyncHandler(async (req, res) => {
     await Professional.findByIdAndUpdate(
         booking.professional,
         {
-            rating: Number(averageRating.toFixed(1))
+            rating: Number(
+                averageRating.toFixed(1)
+            )
         }
     );
 
-    const createdReview = await Review.findById(review._id)
-        .populate(
-            "customer",
-            "fullName avatar"
-        )
-        .populate({
-            path: "professional",
-            populate: {
-                path: "owner",
-                select: "fullName avatar"
-            }
-        });
+    const createdReview =
+        await Review.findById(review._id)
+            .populate(
+                "customer",
+                "fullName avatar"
+            )
+            .populate({
+                path: "professional",
+                populate: {
+                    path: "owner",
+                    select: "fullName avatar"
+                }
+            });
 
     return res.status(201).json(
         new ApiResponse(
@@ -118,179 +126,253 @@ const createReview = asyncHandler(async (req, res) => {
 });
 
 
-const getProfessionalReviews = asyncHandler(async (req, res) => {
 
-    const { professionalId } = req.params;
+const getProfessionalReviews = asyncHandler(
+    async (req, res) => {
 
-    const professional = await Professional.findById(professionalId);
+        const { professionalId } = req.params;
 
-    if (!professional) {
-        throw new ApiError(
-            404,
-            "Professional not found"
-        );
-    }
+        const professional =
+            await Professional.findById(
+                professionalId
+            );
 
-    const reviews = await Review.find({
-        professional: professionalId
-    })
-    .populate(
-        "customer",
-        "fullName avatar"
-    )
-    .sort({
-        createdAt: -1
-    });
-
-    return res.status(200).json(
-        new ApiResponse(
-            200,
-            reviews,
-            "Reviews fetched successfully"
-        )
-    );
-
-});
-
-
-const updateReview = asyncHandler(async (req, res) => {
-
-    const { reviewId } = req.params;
-    const { rating, comment } = req.body;
-
-    if (req.user.role !== "customer") {
-        throw new ApiError(
-            403,
-            "Only customers can update reviews"
-        );
-    }
-
-    const review = await Review.findById(reviewId);
-
-    if (!review) {
-        throw new ApiError(
-            404,
-            "Review not found"
-        );
-    }
-
-    if (review.customer.toString() !== req.user._id.toString()) {
-        throw new ApiError(
-            403,
-            "You can update only your own review"
-        );
-    }
-
-    if (rating !== undefined) {
-
-        if (rating < 1 || rating > 5) {
+        if (!professional) {
             throw new ApiError(
-                400,
-                "Rating must be between 1 and 5"
+                404,
+                "Professional not found"
             );
         }
 
-        review.rating = rating;
+        const reviews = await Review.find({
+            professional: professionalId
+        })
+            .populate(
+                "customer",
+                "fullName avatar"
+            )
+            .sort({
+                createdAt: -1
+            });
+
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                reviews,
+                "Reviews fetched successfully"
+            )
+        );
+
     }
+);
 
-    if (comment) {
-        review.comment = comment;
+
+
+const getHomeTestimonials = asyncHandler(
+    async (req, res) => {
+
+        const reviews = await Review.find({
+            rating: { $gte: 4 },
+            comment: {
+                $exists: true,
+                $ne: ""
+            }
+        })
+            .populate(
+                "customer",
+                "fullName avatar"
+            )
+            .populate({
+                path: "professional",
+                populate: {
+                    path: "owner",
+                    select: "fullName avatar"
+                }
+            })
+            .sort({
+                createdAt: -1
+            })
+            .limit(6);
+
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                reviews,
+                "Testimonials fetched successfully"
+            )
+        );
+
     }
+);
 
-    await review.save();
 
-    // Update Average Rating
-    const reviews = await Review.find({
-        professional: review.professional
-    });
+const updateReview = asyncHandler(
+    async (req, res) => {
 
-    const averageRating =
-        reviews.reduce((sum, item) => sum + item.rating, 0) /
-        reviews.length;
+        const { reviewId } = req.params;
+        const { rating, comment } = req.body;
 
-    await Professional.findByIdAndUpdate(
-        review.professional,
-        {
-            rating: Number(averageRating.toFixed(1))
+        if (req.user.role !== "customer") {
+            throw new ApiError(
+                403,
+                "Only customers can update reviews"
+            );
         }
-    );
 
-    return res.status(200).json(
-        new ApiResponse(
-            200,
-            review,
-            "Review updated successfully"
-        )
-    );
+        const review =
+            await Review.findById(reviewId);
 
-});
-
-
-const deleteReview = asyncHandler(async (req, res) => {
-
-    const { reviewId } = req.params;
-
-    if (req.user.role !== "customer") {
-        throw new ApiError(
-            403,
-            "Only customers can delete reviews"
-        );
-    }
-
-    const review = await Review.findById(reviewId);
-
-    if (!review) {
-        throw new ApiError(
-            404,
-            "Review not found"
-        );
-    }
-    //Ownership Check
-    if (review.customer.toString() !== req.user._id.toString()) {
-        throw new ApiError(
-            403,
-            "You can delete only your own review"
-        );
-    }
-
-    const professionalId = review.professional;
-
-    await Review.findByIdAndDelete(reviewId);
-
-    // Recalculate Rating
-    const reviews = await Review.find({
-        professional: professionalId
-    });
-
-    const averageRating =
-        reviews.length === 0
-            ? 0
-            : reviews.reduce(
-                  (sum, item) => sum + item.rating,
-                  0
-              ) / reviews.length;
-
-    await Professional.findByIdAndUpdate(
-        professionalId,
-        {
-            rating: Number(averageRating.toFixed(1))
+        if (!review) {
+            throw new ApiError(
+                404,
+                "Review not found"
+            );
         }
-    );
 
-    return res.status(200).json(
-        new ApiResponse(
-            200,
-            {},
-            "Review deleted successfully"
-        )
-    );
+        if (
+            review.customer.toString() !==
+            req.user._id.toString()
+        ) {
+            throw new ApiError(
+                403,
+                "You can update only your own review"
+            );
+        }
 
-});
+        if (rating !== undefined) {
+
+            if (rating < 1 || rating > 5) {
+                throw new ApiError(
+                    400,
+                    "Rating must be between 1 and 5"
+                );
+            }
+
+            review.rating = rating;
+        }
+
+        if (comment) {
+            review.comment = comment;
+        }
+
+        await review.save();
+
+        // Update Average Rating
+
+        const reviews = await Review.find({
+            professional: review.professional
+        });
+
+        const averageRating =
+            reviews.reduce(
+                (sum, item) => sum + item.rating,
+                0
+            ) / reviews.length;
+
+        await Professional.findByIdAndUpdate(
+            review.professional,
+            {
+                rating: Number(
+                    averageRating.toFixed(1)
+                )
+            }
+        );
+
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                review,
+                "Review updated successfully"
+            )
+        );
+
+    }
+);
+
+
+
+
+const deleteReview = asyncHandler(
+    async (req, res) => {
+
+        const { reviewId } = req.params;
+
+        if (req.user.role !== "customer") {
+            throw new ApiError(
+                403,
+                "Only customers can delete reviews"
+            );
+        }
+
+        const review =
+            await Review.findById(reviewId);
+
+        if (!review) {
+            throw new ApiError(
+                404,
+                "Review not found"
+            );
+        }
+
+        // Ownership Check
+
+        if (
+            review.customer.toString() !==
+            req.user._id.toString()
+        ) {
+            throw new ApiError(
+                403,
+                "You can delete only your own review"
+            );
+        }
+
+        const professionalId =
+            review.professional;
+
+        await Review.findByIdAndDelete(
+            reviewId
+        );
+
+        // Recalculate Rating
+
+        const reviews = await Review.find({
+            professional: professionalId
+        });
+
+        const averageRating =
+            reviews.length === 0
+                ? 0
+                : reviews.reduce(
+                      (sum, item) =>
+                          sum + item.rating,
+                      0
+                  ) / reviews.length;
+
+        await Professional.findByIdAndUpdate(
+            professionalId,
+            {
+                rating: Number(
+                    averageRating.toFixed(1)
+                )
+            }
+        );
+
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                {},
+                "Review deleted successfully"
+            )
+        );
+
+    }
+);
 
 
 export {
     createReview,
     getProfessionalReviews,
+    getHomeTestimonials,
     updateReview,
     deleteReview
 };

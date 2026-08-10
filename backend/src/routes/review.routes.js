@@ -4,7 +4,8 @@ import {
     createReview,
     getProfessionalReviews,
     updateReview,
-    deleteReview
+    deleteReview,
+    getHomeTestimonials
 } from "../controllers/review.controller.js";
 
 const router = Router();
@@ -13,6 +14,11 @@ const router = Router();
 router.route("/create").post(
     verifyJWT,
     createReview
+);
+
+// HOME PAGE TESTIMONIALS
+router.route("/home").get(
+    getHomeTestimonials
 );
 
 // Get Reviews of a Professional

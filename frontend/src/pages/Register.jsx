@@ -10,6 +10,7 @@ function Register() {
     username: "",
     email: "",
     password: "",
+    confirmPassword:"",
     phone: "",
     city: "",
 
@@ -89,6 +90,17 @@ function Register() {
 
         return;
       }
+
+    }
+
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
     }
 
     try {
@@ -350,12 +362,13 @@ function Register() {
 
             </div>
 
-            {/* PASSWORD + PHONE */}
+            {/* PASSWORD + CONFIRM PASSWORD */}
 
             <div className="grid gap-5 md:grid-cols-2">
 
-              <div>
+              {/* PASSWORD */}
 
+              <div>
                 <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Password *
                 </label>
@@ -367,28 +380,47 @@ function Register() {
                   onChange={handleChange}
                   placeholder="Minimum 8 characters"
                   required
+                  minLength={8}
                   className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
-
               </div>
 
-              <div>
+              {/* CONFIRM PASSWORD */}
 
+              <div>
                 <label className="mb-2 block font-medium text-[var(--text-primary)]">
-                  Phone
+                  Confirm Password *
                 </label>
 
                 <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
                   onChange={handleChange}
-                  placeholder="Enter phone number"
+                  placeholder="Re-enter your password"
+                  required
+                  minLength={8}
                   className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
-
               </div>
 
+            </div>
+
+            {/* PHONE */}
+
+            <div>
+              <label className="mb-2 block font-medium text-[var(--text-primary)]">
+                Phone
+              </label>
+
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Enter phone number"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
+              />
             </div>
 
             {/* CITY */}
