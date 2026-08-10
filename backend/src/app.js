@@ -23,6 +23,12 @@ app.use(express.urlencoded({extended: true, limit: "16kb"}));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+console.log("🔥 HIREPRO APP.JS LOADED");
+
+app.get("/", (req, res) => {
+    res.status(200).send("HirePro Backend is Working!");
+});
+
 app.get("/api/v1/health", (req, res) => {
     res.status(200).json({ success: true, message: "HirePro API is running" });
 });
