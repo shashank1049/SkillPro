@@ -11,7 +11,7 @@ function Home() {
     <>
       
       
-      //HERO SECTION
+      {/* //HERO SECTION */}
 
       <section className="bg-[var(--background)] text-[var(--text-primary)] transition-colors duration-300">
 
