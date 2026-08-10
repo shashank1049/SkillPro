@@ -201,7 +201,10 @@ function Profile() {
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
-    if (!passwordData.oldPassword || !passwordData.newPassword) {
+    if (
+      !passwordData.oldPassword ||
+      !passwordData.newPassword
+    ) {
       setError("Please fill both password fields.");
       return;
     }
@@ -230,7 +233,10 @@ function Profile() {
 
       setSuccess("Password changed successfully.");
     } catch (error) {
-      console.error("Change Password Error:", error);
+      console.error(
+        "Change Password Error:",
+        error
+      );
 
       setError(
         error.response?.data?.message ||
@@ -247,13 +253,13 @@ function Profile() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-10">
+      <main className="min-h-screen bg-[var(--background)] px-4 py-10 transition-colors duration-300">
         <div className="mx-auto max-w-4xl">
           <div className="flex min-h-[60vh] items-center justify-center">
             <div className="text-center">
-              <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+              <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-[var(--border)] border-t-[var(--primary)]"></div>
 
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-[var(--text-secondary)]">
                 Loading your profile...
               </p>
             </div>
@@ -269,27 +275,29 @@ function Profile() {
 
   if (!user) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-10">
+      <main className="min-h-screen bg-[var(--background)] px-4 py-10 transition-colors duration-300">
         <div className="mx-auto max-w-2xl">
-          <div className="rounded-2xl bg-white p-10 text-center shadow-sm">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-2xl">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-10 text-center shadow-sm">
+
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--primary-light)] text-2xl text-[var(--primary)]">
               !
             </div>
 
-            <h1 className="text-2xl font-bold text-slate-900">
+            <h1 className="text-2xl font-bold text-[var(--text-primary)]">
               Unable to load profile
             </h1>
 
-            <p className="mt-2 text-slate-500">
+            <p className="mt-2 text-[var(--text-secondary)]">
               {error || "Something went wrong."}
             </p>
 
             <Link
               to="/"
-              className="mt-6 inline-block rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
+              className="mt-6 inline-block rounded-lg bg-[var(--primary)] px-6 py-3 font-semibold text-white transition hover:bg-[var(--primary-hover)]"
             >
               Go Home
             </Link>
+
           </div>
         </div>
       </main>
@@ -301,40 +309,43 @@ function Profile() {
   // ==========================================
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[var(--background)] px-4 py-8 transition-colors duration-300 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
 
         {/* HEADER */}
 
         <div className="mb-8">
-          <p className="text-sm font-medium text-blue-600">
+          <p className="text-sm font-medium text-[var(--primary)]">
             Account
           </p>
 
-          <h1 className="mt-1 text-3xl font-bold text-slate-900">
+          <h1 className="mt-1 text-3xl font-bold text-[var(--text-primary)]">
             My Profile
           </h1>
 
-          <p className="mt-2 text-slate-500">
+          <p className="mt-2 text-[var(--text-secondary)]">
             Manage your personal information and account settings.
           </p>
         </div>
 
+
         {/* SUCCESS */}
 
         {success && (
-          <div className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+          <div className="mb-6 rounded-xl border border-[var(--success)]/30 bg-[var(--success)]/10 px-4 py-3 text-sm font-medium text-[var(--success)]">
             {success}
           </div>
         )}
 
+
         {/* ERROR */}
 
         {error && (
-          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          <div className="mb-6 rounded-xl border border-[var(--error)]/30 bg-[var(--error)]/10 px-4 py-3 text-sm font-medium text-[var(--error)]">
             {error}
           </div>
         )}
+
 
         <div className="grid gap-6 lg:grid-cols-3">
 
@@ -342,7 +353,7 @@ function Profile() {
               PROFILE CARD
           ======================================= */}
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm transition-colors duration-300">
 
             <div className="flex flex-col items-center text-center">
 
@@ -353,15 +364,15 @@ function Profile() {
                 <img
                   src={
                     user.avatar ||
-                    "https://ui-avatars.com/api/?name=User&background=2563eb&color=fff"
+                    "https://ui-avatars.com/api/?name=User&background=C06C4E&color=fff"
                   }
                   alt={user.fullName || "Profile"}
-                  className="h-32 w-32 rounded-full border-4 border-white object-cover shadow-lg"
+                  className="h-32 w-32 rounded-full border-4 border-[var(--surface)] object-cover shadow-lg"
                 />
 
                 <label
                   htmlFor="avatar"
-                  className="absolute bottom-1 right-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-blue-600 text-white shadow-md transition hover:bg-blue-700"
+                  className="absolute bottom-1 right-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-md transition hover:bg-[var(--primary-hover)]"
                   title="Change profile picture"
                 >
                   ✎
@@ -378,27 +389,27 @@ function Profile() {
               </div>
 
               {uploadingAvatar && (
-                <p className="mt-3 text-xs text-blue-600">
+                <p className="mt-3 text-xs text-[var(--primary)]">
                   Uploading...
                 </p>
               )}
 
-              <h2 className="mt-5 text-xl font-bold text-slate-900">
+              <h2 className="mt-5 text-xl font-bold text-[var(--text-primary)]">
                 {user.fullName}
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">
                 @{user.username}
               </p>
 
               {/* ROLE */}
 
-              <span className="mt-4 rounded-full bg-blue-50 px-4 py-1.5 text-xs font-semibold capitalize text-blue-700">
+              <span className="mt-4 rounded-full bg-[var(--primary-light)] px-4 py-1.5 text-xs font-semibold capitalize text-[var(--primary)]">
                 {user.role}
               </span>
 
               {user.city && (
-                <p className="mt-4 text-sm text-slate-500">
+                <p className="mt-4 text-sm text-[var(--text-secondary)]">
                   📍 {user.city}
                 </p>
               )}
@@ -406,22 +417,23 @@ function Profile() {
             </div>
           </div>
 
+
           {/* ======================================
               ACCOUNT DETAILS
           ======================================= */}
 
           <div className="lg:col-span-2">
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm transition-colors duration-300">
 
               <div className="mb-6 flex items-center justify-between">
 
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900">
+                  <h2 className="text-xl font-bold text-[var(--text-primary)]">
                     Personal Information
                   </h2>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-[var(--text-secondary)]">
                     Update your account information.
                   </p>
                 </div>
@@ -434,13 +446,14 @@ function Profile() {
                       setError("");
                       setSuccess("");
                     }}
-                    className="rounded-lg border border-blue-600 px-4 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50"
+                    className="rounded-lg border border-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary)] transition hover:bg-[var(--primary-light)]"
                   >
                     Edit Profile
                   </button>
                 )}
 
               </div>
+
 
               <form onSubmit={handleUpdateProfile}>
 
@@ -449,7 +462,7 @@ function Profile() {
                   {/* FULL NAME */}
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[var(--text-primary)]">
                       Full Name
                     </label>
 
@@ -459,18 +472,19 @@ function Profile() {
                       value={formData.fullName}
                       onChange={handleChange}
                       disabled={!editing}
-                      className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                      className={`w-full rounded-lg border px-4 py-3 text-sm text-[var(--text-primary)] outline-none transition ${
                         editing
-                          ? "border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                          : "border-slate-200 bg-slate-50 text-slate-600"
+                          ? "border-[var(--border)] bg-[var(--surface)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
+                          : "border-[var(--border)] bg-[var(--background)] text-[var(--text-secondary)]"
                       }`}
                     />
                   </div>
 
+
                   {/* USERNAME */}
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[var(--text-primary)]">
                       Username
                     </label>
 
@@ -480,18 +494,19 @@ function Profile() {
                       value={formData.username}
                       onChange={handleChange}
                       disabled={!editing}
-                      className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                      className={`w-full rounded-lg border px-4 py-3 text-sm text-[var(--text-primary)] outline-none transition ${
                         editing
-                          ? "border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                          : "border-slate-200 bg-slate-50 text-slate-600"
+                          ? "border-[var(--border)] bg-[var(--surface)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
+                          : "border-[var(--border)] bg-[var(--background)] text-[var(--text-secondary)]"
                       }`}
                     />
                   </div>
 
+
                   {/* EMAIL */}
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[var(--text-primary)]">
                       Email
                     </label>
 
@@ -501,18 +516,19 @@ function Profile() {
                       value={formData.email}
                       onChange={handleChange}
                       disabled={!editing}
-                      className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                      className={`w-full rounded-lg border px-4 py-3 text-sm text-[var(--text-primary)] outline-none transition ${
                         editing
-                          ? "border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                          : "border-slate-200 bg-slate-50 text-slate-600"
+                          ? "border-[var(--border)] bg-[var(--surface)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
+                          : "border-[var(--border)] bg-[var(--background)] text-[var(--text-secondary)]"
                       }`}
                     />
                   </div>
 
+
                   {/* PHONE */}
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[var(--text-primary)]">
                       Phone
                     </label>
 
@@ -522,18 +538,19 @@ function Profile() {
                       value={formData.phone}
                       onChange={handleChange}
                       disabled={!editing}
-                      className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                      className={`w-full rounded-lg border px-4 py-3 text-sm text-[var(--text-primary)] outline-none transition ${
                         editing
-                          ? "border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                          : "border-slate-200 bg-slate-50 text-slate-600"
+                          ? "border-[var(--border)] bg-[var(--surface)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
+                          : "border-[var(--border)] bg-[var(--background)] text-[var(--text-secondary)]"
                       }`}
                     />
                   </div>
 
+
                   {/* CITY */}
 
                   <div className="sm:col-span-2">
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[var(--text-primary)]">
                       City
                     </label>
 
@@ -543,15 +560,16 @@ function Profile() {
                       value={formData.city}
                       onChange={handleChange}
                       disabled={!editing}
-                      className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
+                      className={`w-full rounded-lg border px-4 py-3 text-sm text-[var(--text-primary)] outline-none transition ${
                         editing
-                          ? "border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                          : "border-slate-200 bg-slate-50 text-slate-600"
+                          ? "border-[var(--border)] bg-[var(--surface)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
+                          : "border-[var(--border)] bg-[var(--background)] text-[var(--text-secondary)]"
                       }`}
                     />
                   </div>
 
                 </div>
+
 
                 {/* BUTTONS */}
 
@@ -573,7 +591,7 @@ function Profile() {
 
                         setError("");
                       }}
-                      className="rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                      className="rounded-lg border border-[var(--border)] px-5 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--background)]"
                     >
                       Cancel
                     </button>
@@ -581,7 +599,7 @@ function Profile() {
                     <button
                       type="submit"
                       disabled={saving}
-                      className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="rounded-lg bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {saving ? "Saving..." : "Save Changes"}
                     </button>
@@ -592,21 +610,23 @@ function Profile() {
               </form>
             </div>
 
+
             {/* ======================================
                 CHANGE PASSWORD
             ======================================= */}
 
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm transition-colors duration-300">
 
               <div className="mb-6">
-                <h2 className="text-xl font-bold text-slate-900">
+                <h2 className="text-xl font-bold text-[var(--text-primary)]">
                   Change Password
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
                   Keep your account secure with a strong password.
                 </p>
               </div>
+
 
               <form onSubmit={handleChangePassword}>
 
@@ -615,7 +635,7 @@ function Profile() {
                   {/* OLD PASSWORD */}
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[var(--text-primary)]">
                       Current Password
                     </label>
 
@@ -625,14 +645,15 @@ function Profile() {
                       value={passwordData.oldPassword}
                       onChange={handlePasswordChange}
                       placeholder="Enter current password"
-                      className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                     />
                   </div>
+
 
                   {/* NEW PASSWORD */}
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[var(--text-primary)]">
                       New Password
                     </label>
 
@@ -642,18 +663,19 @@ function Profile() {
                       value={passwordData.newPassword}
                       onChange={handlePasswordChange}
                       placeholder="Enter new password"
-                      className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                     />
                   </div>
 
                 </div>
+
 
                 <div className="mt-5 flex justify-end">
 
                   <button
                     type="submit"
                     disabled={changingPassword}
-                    className="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-lg bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {changingPassword
                       ? "Changing..."
@@ -663,10 +685,13 @@ function Profile() {
                 </div>
 
               </form>
+
             </div>
 
           </div>
+
         </div>
+
       </div>
     </main>
   );
