@@ -9,7 +9,9 @@ import CTASection from "../components/home/CTASection";
 function Home() {
   return (
     <>
-      {/* HERO SECTION */}
+      
+      
+      //HERO SECTION
 
       <section className="bg-[var(--background)] text-[var(--text-primary)] transition-colors duration-300">
 
@@ -17,7 +19,9 @@ function Home() {
 
           <div className="grid w-full items-center gap-12 lg:grid-cols-2">
 
-            {/* LEFT CONTENT */}
+            
+           {/* LEFT CONTENT */}
+           
 
             <div className="text-center lg:text-left">
 
@@ -25,21 +29,31 @@ function Home() {
                 Trusted professionals, one platform
               </div>
 
+
               <h1 className="text-5xl font-bold leading-tight text-[var(--text-primary)] md:text-6xl lg:text-7xl">
+
                 Hire Trusted{" "}
+
                 <span className="text-[var(--primary)]">
                   Professionals
                 </span>
+
                 <br />
+
                 For Every Job
+
               </h1>
 
+
               <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--text-secondary)]">
+
                 From plumbers and electricians to drivers,
                 mechanics, tutors and developers — find
                 skilled professionals you can trust, right
                 when you need them.
+
               </p>
+
 
               {/* BUTTONS */}
 
@@ -52,6 +66,7 @@ function Home() {
                   Find Services
                 </Link>
 
+
                 <Link
                   to="/register"
                   className="rounded-lg border border-[var(--primary)] px-8 py-3.5 text-center font-semibold text-[var(--primary)] transition hover:bg-[var(--primary-light)]"
@@ -61,22 +76,31 @@ function Home() {
 
               </div>
 
+
               {/* TRUST INFO */}
 
               <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm text-[var(--text-secondary)] lg:justify-start">
 
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">✓</span>
+                  <span className="text-lg text-[var(--primary)]">
+                    ✓
+                  </span>
                   Verified Professionals
                 </div>
 
+
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">✓</span>
+                  <span className="text-lg text-[var(--primary)]">
+                    ✓
+                  </span>
                   Secure Payments
                 </div>
 
+
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">✓</span>
+                  <span className="text-lg text-[var(--primary)]">
+                    ✓
+                  </span>
                   Easy Booking
                 </div>
 
@@ -89,11 +113,12 @@ function Home() {
 
             <div className="relative">
 
-              {/* Decorative background */}
+              {/* Decorative Background */}
 
               <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-[var(--primary-light)] opacity-60 blur-2xl" />
 
               <div className="absolute -bottom-6 -left-6 h-40 w-40 rounded-full bg-[var(--primary-light)] opacity-40 blur-3xl" />
+
 
               {/* IMAGE CARD */}
 
@@ -102,34 +127,53 @@ function Home() {
                 <img
                   src="/images/hero.png"
                   alt="HirePro professionals"
-                  className="h- w-full rounded-2xl object-cover"
+                  className="w-full rounded-2xl object-cover"
                 />
 
               </div>
 
-              {/* FLOATING CARD */}
 
-              <div className="absolute -bottom-5 -left-5 hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg sm:block">
+              {/* FLOATING INFO CARD */}
+
+              <div className="absolute -bottom-6 -right-5 hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg sm:block">
 
                 <div className="flex items-center gap-3">
 
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-950/40">
-                    ✓
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-light)] text-xl font-bold text-[var(--primary)]">
+                    ⌕
                   </div>
 
+
                   <div>
+
                     <p className="font-semibold text-[var(--text-primary)]">
-                      Trusted Professionals
+                      Find the Right Professional
                     </p>
 
-                    <p className="text-sm text-[var(--text-secondary)]">
-                      Ready to help you
-                    </p>
+                    {/* <p className="text-sm text-[var(--text-secondary)]">
+                      Simple, fast and reliable
+                    </p> */}
+
                   </div>
 
                 </div>
 
               </div>
+
+
+              {/* SMALL TOP INFO
+
+              <div className="absolute -left-5 top-8 hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 shadow-lg md:block">
+
+                <p className="text-sm font-semibold text-[var(--text-primary)]">
+                  One Platform
+                </p>
+
+                <p className="text-xs text-[var(--text-secondary)]">
+                  Multiple Services
+                </p>
+
+              </div> */}
 
             </div>
 
