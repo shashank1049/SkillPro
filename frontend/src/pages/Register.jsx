@@ -10,7 +10,7 @@ function Register() {
     username: "",
     email: "",
     password: "",
-    confirmPassword:"",
+    confirmPassword: "",
     phone: "",
     city: "",
 
@@ -39,9 +39,26 @@ function Register() {
     const { name, value, files } = e.target;
 
     if (name === "portfolioImages") {
+      const selectedFiles = Array.from(files || []);
+
+      if (selectedFiles.length > 5) {
+        setError(
+          "You can upload maximum 5 portfolio images."
+        );
+
+        setFormData((prev) => ({
+          ...prev,
+          portfolioImages: selectedFiles.slice(0, 5),
+        }));
+
+        return;
+      }
+
+      setError("");
+
       setFormData((prev) => ({
         ...prev,
-        portfolioImages: Array.from(files),
+        portfolioImages: selectedFiles,
       }));
 
       return;
@@ -62,69 +79,103 @@ function Register() {
 
     setError("");
 
-    // Basic validation
+    // ========================================
+    // BASIC VALIDATION
+    // ========================================
+
     if (
-      !formData.fullName ||
-      !formData.username ||
-      !formData.email ||
+      !formData.fullName.trim() ||
+      !formData.username.trim() ||
+      !formData.email.trim() ||
       !formData.password
     ) {
-      setError("Please fill all required fields.");
+      setError(
+        "Please fill all required fields."
+      );
       return;
     }
+
+    // ========================================
+    // AVATAR
+    // ========================================
 
     if (!formData.avatar) {
-      setError("Please select a profile picture.");
+      setError(
+        "Please select a profile picture."
+      );
       return;
     }
 
-    // Professional validation
-    if (formData.role === "professional") {
-      if (
-        !formData.profession ||
-        !formData.pricing
-      ) {
-        setError(
-          "Profession and pricing are required for professionals."
-        );
+    // ========================================
+    // PASSWORD
+    // ========================================
 
+    if (formData.password.length < 8) {
+      setError(
+        "Password must be at least 8 characters."
+      );
+      return;
+    }
+
+    if (
+      formData.password !==
+      formData.confirmPassword
+    ) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    // ========================================
+    // PROFESSIONAL VALIDATION
+    // ========================================
+
+    if (
+      formData.role === "professional"
+    ) {
+      if (!formData.profession.trim()) {
+        setError(
+          "Profession is required for professionals."
+        );
         return;
       }
 
-    }
-
-    if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters.");
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
-      return;
+      if (
+        formData.pricing === "" ||
+        Number(formData.pricing) < 0
+      ) {
+        setError(
+          "Valid pricing is required for professionals."
+        );
+        return;
+      }
     }
 
     try {
       setLoading(true);
 
       // ========================================
-      // STEP 1: CREATE USER
+      // CREATE FORM DATA
       // ========================================
 
       const userData = new FormData();
 
+      // ========================================
+      // BASIC USER DATA
+      // ========================================
+
       userData.append(
         "fullName",
-        formData.fullName
+        formData.fullName.trim()
       );
 
       userData.append(
         "username",
-        formData.username
+        formData.username.trim()
       );
 
       userData.append(
         "email",
-        formData.email
+        formData.email.trim()
       );
 
       userData.append(
@@ -134,12 +185,12 @@ function Register() {
 
       userData.append(
         "phone",
-        formData.phone
+        formData.phone.trim()
       );
 
       userData.append(
         "city",
-        formData.city
+        formData.city.trim()
       );
 
       userData.append(
@@ -147,87 +198,128 @@ function Register() {
         formData.role
       );
 
+      // ========================================
+      // AVATAR
+      // ========================================
+
       userData.append(
         "avatar",
         formData.avatar
       );
 
-      console.log("Registering user...");
-
-      const registerResponse =
-        await api.post(
-          "/auth/register",
-          userData
-        );
-
-      console.log(
-        "Register Response:",
-        registerResponse.data
-      );
-
       // ========================================
-      // CUSTOMER
+      // PROFESSIONAL DATA
       // ========================================
 
-      if (formData.role === "customer") {
-        alert(
-          "Registration successful! Please login."
+      if (
+        formData.role === "professional"
+      ) {
+        userData.append(
+          "profession",
+          formData.profession.trim()
         );
 
-        navigate("/login");
+        userData.append(
+          "bio",
+          formData.bio.trim()
+        );
 
-        return;
+        userData.append(
+          "experience",
+          formData.experience || "0"
+        );
+
+        userData.append(
+          "skills",
+          formData.skills.trim()
+        );
+
+        userData.append(
+          "pricing",
+          formData.pricing
+        );
+
+        userData.append(
+          "serviceAreas",
+          formData.serviceAreas.trim()
+        );
+
+        // Portfolio images
+        formData.portfolioImages.forEach(
+          (file) => {
+            userData.append(
+              "portfolioImages",
+              file
+            );
+          }
+        );
       }
 
       // ========================================
-      // PROFESSIONAL
+      // DEBUG
       // ========================================
 
-      const professionalData = {
-        profession:
-          formData.profession,
-
-        bio:
-          formData.bio,
-
-        experience:
-          Number(formData.experience) || 0,
-
-        skills:
-          formData.skills
-            .split(",")
-            .map((skill) => skill.trim())
-            .filter(Boolean),
-
-        pricing:
-          Number(formData.pricing),
-
-        serviceAreas:
-          formData.serviceAreas
-            .split(",")
-            .map((area) => area.trim())
-            .filter(Boolean),
-      };
-
       console.log(
-        "Creating Professional Profile:",
-        professionalData
+        "Registering user..."
       );
 
-      const professionalResponse =
-        await api.post(
-          "/professional/create-profile",
-          professionalData
+      console.log(
+        "Role:",
+        formData.role
+      );
+
+      if (
+        formData.role === "professional"
+      ) {
+        console.log(
+          "Professional details:",
+          {
+            profession:
+              formData.profession,
+            bio: formData.bio,
+            experience:
+              formData.experience,
+            skills:
+              formData.skills,
+            pricing:
+              formData.pricing,
+            serviceAreas:
+              formData.serviceAreas,
+            portfolioImages:
+              formData.portfolioImages.length,
+          }
         );
+      }
+
+      // ========================================
+      // SINGLE REGISTER REQUEST
+      // ========================================
+
+      const response = await api.post(
+        "/auth/register",
+        userData
+      );
 
       console.log(
-        "Professional Profile:",
-        professionalResponse.data
+        "Register Response:",
+        response.data
       );
 
-      alert(
-        "Professional account created successfully!"
-      );
+      // ========================================
+      // SUCCESS
+      // ========================================
+
+      if (
+        formData.role === "professional"
+      ) {
+        alert(
+          "Professional account created successfully! Please login."
+        );
+      } else {
+        alert(
+          "Registration successful! Please login."
+        );
+      }
 
       navigate("/login");
 
@@ -269,6 +361,7 @@ function Register() {
 
           </div>
 
+
           {/* =====================================
               ERROR
           ====================================== */}
@@ -278,6 +371,11 @@ function Register() {
               {error}
             </div>
           )}
+
+
+          {/* =====================================
+              FORM
+          ====================================== */}
 
           <form
             onSubmit={handleSubmit}
@@ -300,6 +398,7 @@ function Register() {
 
             </div>
 
+
             {/* FULL NAME */}
 
             <div>
@@ -319,6 +418,7 @@ function Register() {
               />
 
             </div>
+
 
             {/* USERNAME + EMAIL */}
 
@@ -342,6 +442,7 @@ function Register() {
 
               </div>
 
+
               <div>
 
                 <label className="mb-2 block font-medium text-[var(--text-primary)]">
@@ -362,13 +463,13 @@ function Register() {
 
             </div>
 
+
             {/* PASSWORD + CONFIRM PASSWORD */}
 
             <div className="grid gap-5 md:grid-cols-2">
 
-              {/* PASSWORD */}
-
               <div>
+
                 <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Password *
                 </label>
@@ -383,11 +484,12 @@ function Register() {
                   minLength={8}
                   className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
+
               </div>
 
-              {/* CONFIRM PASSWORD */}
 
               <div>
+
                 <label className="mb-2 block font-medium text-[var(--text-primary)]">
                   Confirm Password *
                 </label>
@@ -402,13 +504,16 @@ function Register() {
                   minLength={8}
                   className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                 />
+
               </div>
 
             </div>
 
+
             {/* PHONE */}
 
             <div>
+
               <label className="mb-2 block font-medium text-[var(--text-primary)]">
                 Phone
               </label>
@@ -421,7 +526,9 @@ function Register() {
                 placeholder="Enter phone number"
                 className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
               />
+
             </div>
+
 
             {/* CITY */}
 
@@ -442,6 +549,7 @@ function Register() {
 
             </div>
 
+
             {/* AVATAR */}
 
             <div>
@@ -460,6 +568,7 @@ function Register() {
               />
 
             </div>
+
 
             {/* =====================================
                 ROLE
@@ -505,6 +614,7 @@ function Register() {
 
                 </label>
 
+
                 {/* PROFESSIONAL */}
 
                 <label
@@ -541,6 +651,7 @@ function Register() {
 
             </div>
 
+
             {/* =====================================
                 PROFESSIONAL INFORMATION
             ====================================== */}
@@ -555,11 +666,11 @@ function Register() {
                   </h2>
 
                   <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                    Add information about the services
-                    you provide.
+                    Add information about the services you provide.
                   </p>
 
                 </div>
+
 
                 {/* PROFESSION */}
 
@@ -584,6 +695,7 @@ function Register() {
 
                 </div>
 
+
                 {/* BIO */}
 
                 <div className="mt-5">
@@ -602,6 +714,7 @@ function Register() {
                   />
 
                 </div>
+
 
                 {/* EXPERIENCE + PRICING */}
 
@@ -624,6 +737,7 @@ function Register() {
                     />
 
                   </div>
+
 
                   <div>
 
@@ -649,6 +763,7 @@ function Register() {
 
                 </div>
 
+
                 {/* SKILLS */}
 
                 <div className="mt-5">
@@ -662,7 +777,7 @@ function Register() {
                     name="skills"
                     value={formData.skills}
                     onChange={handleChange}
-                    placeholder="e.g. SUV, Sedan, Luxury Cars"
+                    placeholder="e.g. React, Node.js, MongoDB"
                     className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-secondary)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-light)]"
                   />
 
@@ -671,6 +786,7 @@ function Register() {
                   </p>
 
                 </div>
+
 
                 {/* SERVICE AREAS */}
 
@@ -695,6 +811,7 @@ function Register() {
 
                 </div>
 
+
                 {/* PORTFOLIO */}
 
                 <div className="mt-5">
@@ -713,13 +830,31 @@ function Register() {
                   />
 
                   <p className="mt-1 text-xs text-[var(--text-secondary)]">
-                    Add images that showcase your work.
+                    You can upload up to 5 images.
                   </p>
+
+                  {formData.portfolioImages.length >
+                    0 && (
+                    <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                      {
+                        formData
+                          .portfolioImages
+                          .length
+                      }{" "}
+                      image
+                      {formData.portfolioImages
+                        .length > 1
+                        ? "s"
+                        : ""}{" "}
+                      selected
+                    </p>
+                  )}
 
                 </div>
 
               </div>
             )}
+
 
             {/* =====================================
                 SUBMIT
@@ -738,6 +873,7 @@ function Register() {
             </button>
 
           </form>
+
 
           {/* LOGIN */}
 

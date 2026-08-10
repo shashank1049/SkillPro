@@ -23,6 +23,10 @@ router.route("/register").post(upload.fields([
     {
         name:"coverImage",
         maxCount: 1
+    },
+    {
+        name:"portfolioImages",
+        maxCount:5
     }
 ]), registerUser);
 router.route("/login").post(loginUser);
