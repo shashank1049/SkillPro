@@ -220,7 +220,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     );
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite:"none"
     };
     return res
         .status(200)
@@ -263,7 +264,8 @@ const refreshAccessToken=asyncHandler(async (req, res )=>{
         );
         const options = {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
+            secure: true,
+            sameSite:"none"
         };
         return res
             .status(200)
